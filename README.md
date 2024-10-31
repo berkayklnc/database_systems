@@ -1,6 +1,6 @@
 # database_systems
 
-# terminal komutları
+## terminal komutları
 1) pip3 install Flask
 2) python3 server.py
 
