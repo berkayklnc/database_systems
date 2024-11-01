@@ -1,0 +1,8 @@
+USE db_systems;
+
+CREATE TABLE IF NOT EXISTS planes (
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(20) NOT NULL,
+    chair_number SMALLINT UNSIGNED NOT NULL,
+    price DECIMAL(5, 2)
+);
