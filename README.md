@@ -18,7 +18,9 @@ Aşağıdaki komutu çalıştırarak `requirements.txt` dosyasındaki bağımlı
 5) Yeni bir paket eklendiğinde aşağıdaki kodu çalıştırıp requirements.txt dosyasını güncelleyin.
     ```bash
     pip3 freeze > requirements.txt
-   
+
+
+6) Settings dosyasına yeni bir şey eklendiğinde settings_exxample.py dosyasını güncelleyin.
 
 
 
