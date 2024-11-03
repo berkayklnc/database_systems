@@ -6,6 +6,10 @@
 Aşağıdaki komutu çalıştırarak `requirements.txt` dosyasındaki bağımlılıkları indirin:
    ```bash
    pip3 install -r requirements.txt
+2) Eğer install işlemi hata verirse mac için aşağıdaki kodu yazın.
+
+   ```bash
+   brew install pkg-config
 
 3) kendinize ait bir settings.py dosyası oluşturun ve settings_example.py dosyasındaki bilgileri kendinize göre doldurup settings.py dosyasına kaydedin.
 
