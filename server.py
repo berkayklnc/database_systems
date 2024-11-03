@@ -1,11 +1,11 @@
 from flask import Flask
-import views
-from helpers.execute_sql import setup_database
+from app import views
+from app.helpers.execute_sql import setup_database
 from flask_mysqldb import MySQL
 
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__,template_folder='app/templates')
     app.config.from_object('settings')
     app.add_url_rule('/', view_func=views.home_page)
     db = MySQL(app)
