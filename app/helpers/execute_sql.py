@@ -17,7 +17,6 @@ def execute_sql_file(filename):
         finally:
             cur.close()
 def setup_database():
-    with current_app.app_context():
         execute_sql_file('app/sql/create_database.sql')
         execute_sql_file('app/sql/create_users_table.sql')
         execute_sql_file('app/sql/create_planes_table.sql')
