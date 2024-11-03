@@ -1,0 +1,28 @@
+name: Auto Pull Request
+
+on:
+  push:
+    branches-ignore:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  create_pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3
+
+      - name: Create Pull Request
+        id: pr
+        uses: repo-sync/pull-request@v2
+        with:
+          source_branch: ${{ github.ref_name }}
+          destination_branch: main
+          pr_title: "Auto PR: ${{ github.ref_name }} -> main"
+          pr_body: "Yeni commitler ${{ github.ref_name }} branşından main branşına otomatik olarak taşındı."
+          pr_reviewer: "berkayklnc"
