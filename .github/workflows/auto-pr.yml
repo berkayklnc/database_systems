@@ -6,10 +6,13 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   create_pr:
     runs-on: ubuntu-latest
-
     steps:
       - name: Check out the repository
         uses: actions/checkout@v3
@@ -23,7 +26,3 @@ jobs:
           pr_title: "Auto PR: ${{ github.ref_name }} -> main"
           pr_body: "Yeni commitler ${{ github.ref_name }} branşından main branşına otomatik olarak taşındı."
           pr_reviewer: "berkayklnc"
-
-      - name: PR created
-        if: steps.pr.outputs.pull_request_number
-        run: echo "PR #${{ steps.pr.outputs.pull_request_number }} created."
