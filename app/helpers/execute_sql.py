@@ -20,4 +20,5 @@ def setup_database():
         execute_sql_file('app/sql/create_database.sql')
         execute_sql_file('app/sql/create_users_table.sql')
         execute_sql_file('app/sql/create_planes_table.sql')
-        #execute_sql_file('app/sql/create_players_table.sql')   bu satırı game_mode tablosundan sonra etkinleştir
+        execute_sql_file('app/sql/create_game_mode_table.sql')
+        execute_sql_file('app/sql/create_players_table.sql')   

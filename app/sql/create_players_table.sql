@@ -6,9 +6,11 @@ CREATE TABLE IF NOT EXISTS players(
     password VARCHAR(100) NOT NULL,
     user_name VARCHAR(15) NOT NULL,
     game_mode_id ENUM('EASY','MEDIUM','HARD') NOT NULL,
+    
     CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
+
     CONSTRAINT fk_game_mode_id FOREIGN KEY (game_mode_id) REFERENCES game_mode(id)
     ON DELETE CASCADE
     ON UPDATE CASCADE
