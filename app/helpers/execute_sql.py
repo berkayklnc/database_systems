@@ -21,4 +21,6 @@ def setup_database():
         execute_sql_file('app/sql/create_users_table.sql')
         execute_sql_file('app/sql/create_planes_table.sql')
         execute_sql_file('app/sql/create_game_mode_table.sql')
-        execute_sql_file('app/sql/create_players_table.sql')   
+        execute_sql_file('app/sql/create_players_table.sql')
+        execute_sql_file('app/sql/create_game_time_table.sql')
+
