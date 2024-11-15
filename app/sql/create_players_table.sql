@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS players(
     ON DELETE CASCADE
     ON UPDATE CASCADE,
 
-    FOREIGN KEY (game_mode_id) REFERENCES game_mode(id)
+    FOREIGN KEY (game_mode_id) REFERENCES game_modes(id)
     ON DELETE CASCADE
     ON UPDATE CASCADE
 );
