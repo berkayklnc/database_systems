@@ -1,8 +1,7 @@
 from flask import current_app
 
 def execute_sql_file(filename):
-    mysql = current_app.config['DB']
-
+    mysql = current_app.config['mysql']
     with open(filename, 'r') as file:
         sql_statements = file.read()
         cur = mysql.connection.cursor()
@@ -18,9 +17,13 @@ def execute_sql_file(filename):
             cur.close()
 def setup_database():
         execute_sql_file('app/sql/create_database.sql')
+
+        current_app.config['MYSQL_DB'] = current_app.config['DB_NAME']
+        mysql = current_app.config['mysql']
+        mysql.connection.select_db(current_app.config['MYSQL_DB'])
+
         execute_sql_file('app/sql/create_users_table.sql')
         execute_sql_file('app/sql/create_planes_table.sql')
-        execute_sql_file('app/sql/create_game_mode_table.sql')
+        execute_sql_file('app/sql/create_game_modes_table.sql')
         execute_sql_file('app/sql/create_players_table.sql')
-        execute_sql_file('app/sql/create_game_time_table.sql')
-
+        execute_sql_file('app/sql/create_game_times_table.sql')

@@ -1,4 +1,3 @@
-USE db_systems;
 CREATE TABLE IF NOT EXISTS players(
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     balance INT,
@@ -7,11 +6,11 @@ CREATE TABLE IF NOT EXISTS players(
     user_name VARCHAR(15) NOT NULL,
     game_mode_id ENUM('EASY','MEDIUM','HARD') NOT NULL,
     
-    CONSTRAINT fk_user_id FOREIGN KEY (user_id) REFERENCES users(id)
+    FOREIGN KEY (user_id) REFERENCES users(id)
     ON DELETE CASCADE
     ON UPDATE CASCADE,
 
-    CONSTRAINT fk_game_mode_id FOREIGN KEY (game_mode_id) REFERENCES game_modes(id)
+    FOREIGN KEY (game_mode_id) REFERENCES game_modes(id)
     ON DELETE CASCADE
     ON UPDATE CASCADE
 );
