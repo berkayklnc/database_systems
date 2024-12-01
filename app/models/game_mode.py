@@ -8,6 +8,7 @@ class GameMode:
         self.first_balance = first_balance
 
 class GameModeModel:
+    
     def __init__(self):
         self.mysql = current_app.config['mysql']
 
