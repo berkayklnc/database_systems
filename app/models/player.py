@@ -1,6 +1,6 @@
 from flask import current_app
 
-from database_systems.app.models.User import UserModel, User
+from app.models.User import UserModel,User
 
 
 class Player:
@@ -24,9 +24,7 @@ class PlayerModel:
 
 
     def add_player(self, player):
-        user_model = UserModel()
-        user_id = user_model.add_user(player)
         cursor = self.mysql.connection.cursor()
-        cursor.execute(f"INSERT INTO players (balance, '{user_id}', password, user_name) VALUES (%s, %s, %s, %s)", (player.balance, player.user_id, player.password,player.user_name))
+        cursor.execute("INSERT INTO players (balance, user_id, password, user_name) VALUES (%s, %s, %s, %s)", (player.balance, player.user_id, player.password,player.user_name))
 
 
