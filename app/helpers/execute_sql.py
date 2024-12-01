@@ -27,3 +27,4 @@ def setup_database():
         execute_sql_file('app/sql/create_game_modes_table.sql')
         execute_sql_file('app/sql/create_players_table.sql')
         execute_sql_file('app/sql/create_game_times_table.sql')
+        execute_sql_file('app/sql/create_flights_table.sql')

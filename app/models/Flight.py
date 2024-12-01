@@ -62,9 +62,15 @@ class FlightModel:
         flight=cursor.fetchnone()
         cursor.close()
         return flight
-    def deleete_flight_by_id(self,id):
+    def delete_flight_by_id(self,id):
         cursor=self.mysql.connection.cursor()
         cursor.execute("DELETE * FROM flights WHERE id=%s",(id))
+        flight=cursor.fetchnone()
+        cursor.close()
+        return flight
+    def get_transfered_flights(self,origin,destination):
+        cursor=self.mysql.connection.cursor()
+        cursor.execute("SELECT * FROM flights f1 INNER JOIN flights f2 ON f1.dest_city=f2.origin_city WHERE f1.origin_city=%s AND f2.dest_city=%s",(origin,destination))
         flight=cursor.fetchnone()
         cursor.close()
         return flight
