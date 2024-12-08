@@ -8,3 +8,7 @@ def before_request():
 def home_page():
     user_name = session.get('user_name')
     return render_template('home.html',user_name=user_name)
+    
+def flight_page():
+    return render_template('flights.html')
+
