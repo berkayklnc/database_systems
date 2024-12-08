@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flight Search</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center">
+  <div class="bg-white p-8 rounded-lg shadow-lg w-96">
+    <h1 class="text-2xl font-bold text-center mb-6">Flight Search</h1>
+    <form action="#" method="POST" class="space-y-4">
+      <!-- Origin City -->
+      <div>
+        <label for="origin" class="block text-sm font-medium text-gray-700">Origin City</label>
+        <select id="origin" name="origin" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+          <option value="istanbul">Istanbul</option>
+          <option value="london">London</option>
+          <option value="paris">Paris</option>
+          <option value="newyork">New York</option>
+        </select>
+      </div>
+
+      <!-- Destination City -->
+      <div>
+        <label for="destination" class="block text-sm font-medium text-gray-700">Destination City</label>
+        <select id="destination" name="destination" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+          <option value="istanbul">Istanbul</option>
+          <option value="london">London</option>
+          <option value="paris">Paris</option>
+          <option value="newyork">New York</option>
+        </select>
+      </div>
+
+      <!-- Flight Date -->
+      <div>
+        <label for="flightDate" class="block text-sm font-medium text-gray-700">Flight Date</label>
+        <input type="date" id="flightDate" name="flightDate" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+      </div>
+
+      <!-- Submit Button -->
+      <div>
+        <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+          Search Flights
+        </button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

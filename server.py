@@ -9,6 +9,7 @@ def create_app():
     app.json.ensure_ascii = False
     app.config.from_object('settings')
     app.add_url_rule('/', view_func=views.home_page)
+    app.add_url_rule('/flights', view_func=views.flight_page)
     mysql = MySQL(app)
     app.config["mysql"] = mysql
 

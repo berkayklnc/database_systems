@@ -27,3 +27,7 @@ def home_page():
     today = datetime.today()
     day_name = today.strftime("%A")
     return render_template('home.html',day=day_name)
+    
+def flight_page():
+    return render_template('flights.html')
+
