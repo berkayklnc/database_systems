@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block title %}Home{% endblock %}
 {% block content %}
-    <h1>My movie collection</h1>
-    <p>Have a nice {{ day }}!</p>
+    <p>Welcome {{ user_name }}!</p>
+    <a href="{{ url_for('logout') }}">Logout</a>
 {% endblock %}

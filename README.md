@@ -26,7 +26,7 @@ Aşağıdaki komutu çalıştırarak `requirements.txt` dosyasındaki bağımlı
 
 6) Settings dosyasına yeni bir şey eklendiğinde settings_exxample.py dosyasını güncelleyin.
 
-
+7) Example User: username: Test,password:12345678
 
 temel olarak alınacak documentation https://web.itu.edu.tr/uyar/fad/index.html
 

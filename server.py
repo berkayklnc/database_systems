@@ -1,17 +1,22 @@
 from flask import Flask
 from app import views
+from app.auth import views as auth_views
+from app.auth.views import logout
 from app.helpers.execute_sql import setup_database
 from flask_mysqldb import MySQL
-
+from app.views import main
 
 def create_app():
     app = Flask(__name__,template_folder='app/templates')
     app.json.ensure_ascii = False
     app.config.from_object('settings')
     app.add_url_rule('/', view_func=views.home_page)
+    app.add_url_rule('/login', view_func=auth_views.login_page)
+    app.add_url_rule('/login', 'login', auth_views.handle_login, methods=['POST'])
+    app.add_url_rule('/logout','logout',auth_views.logout)
     mysql = MySQL(app)
     app.config["mysql"] = mysql
-
+    app.register_blueprint(main)
     with app.app_context():
         setup_database()
     return app

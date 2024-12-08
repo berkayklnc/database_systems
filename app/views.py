@@ -1,29 +1,10 @@
-from datetime import datetime
-from flask import render_template, jsonify
+from flask import current_app, render_template, session, redirect, url_for, request, Blueprint
 
-from app.models.User import UserModel,User
-from app.models.Plane import PlaneModel,Plane
-from app.models.Player import Player,PlayerModel
+main = Blueprint('main', __name__)
+@main.before_app_request
+def before_request():
+    if 'user_name' not in session and request.endpoint not in ['login_page','login', 'static']:
+        return redirect(url_for('login'))
 def home_page():
-    user_model = UserModel()
-    NewUser = User('Berkay', 'Kılınç','male')
-    user_id = user_model.add_user(NewUser)    
-
-    NewPlane=Plane('U317',120,1000000)
-    NewPlayer=Player(balance=1500, user_id=user_id, password="secure123", user_name="Berkay")
-
-    #plane_model=PlaneModel()
-    
-    player_model = PlayerModel()
-
-    
-    #users = user_model.get_all_users()
-    #player_model.add_player(NewPlayer)
-    #plane_model.add_plane(NewPlane)
-    #planes=plane_model.get_all_planes()
-    #players = player_model.get_all_players()   TRY AFTER GAMEMODE MODEL
-
-    #return jsonify(players)
-    today = datetime.today()
-    day_name = today.strftime("%A")
-    return render_template('home.html',day=day_name)
+    user_name = session.get('user_name')
+    return render_template('home.html',user_name=user_name)
