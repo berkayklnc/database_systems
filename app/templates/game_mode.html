@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Modes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    table, th, td {
+      border: 1px solid black;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    .form-container {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Game Modes Management</h1>
+
+  <div class="form-container">
+    <h3>Add Game Mode</h3>
+    <form id="addGameModeForm">
+      <label for="id">Mode (EASY, MEDIUM, HARD):</label><br>
+      <input type="text" id="id" name="id" required><br><br>
+
+      <label for="chance">Chance (e.g., 0.5):</label><br>
+      <input type="number" id="chance" name="chance" step="0.01" required><br><br>
+
+      <label for="coinMultiplier">Coin Multiplier:</label><br>
+      <input type="number" id="coinMultiplier" name="coinMultiplier" step="0.1" required><br><br>
+
+      <label for="firstBalance">First Balance:</label><br>
+      <input type="number" id="firstBalance" name="firstBalance" required><br><br>
+
+      <button type="submit">Add Game Mode</button>
+    </form>
+  </div>
+
+  <h3>Available Game Modes</h3>
+  <table id="gameModesTable">
+    <thead>
+      <tr>
+        <th>Mode</th>
+        <th>Chance</th>
+        <th>Coin Multiplier</th>
+        <th>First Balance</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Game modes will be dynamically populated here -->
+    </tbody>
+  </table>
+
+  <script>
+    const apiUrl = "http://localhost:5000/game_modes"; // Replace with your backend URL
+
+    // Fetch game modes and populate the table
+    function fetchGameModes() {
+      fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+          const tableBody = document.getElementById("gameModesTable").querySelector("tbody");
+          tableBody.innerHTML = ""; // Clear existing rows
+
+          data.forEach(gameMode => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td>${gameMode.id}</td>
+              <td>${gameMode.chance}</td>
+              <td>${gameMode.coin_multiplier}</td>
+              <td>${gameMode.first_balance}</td>
+              <td>
+                <button onclick="deleteGameMode('${gameMode.id}')">Delete</button>
+              </td>
+            `;
+            tableBody.appendChild(row);
+          });
+        })
+        .catch(error => console.error("Error fetching game modes:", error));
+    }
+
+    // Add a new game mode
+    document.getElementById("addGameModeForm").addEventListener("submit", event => {
+      event.preventDefault();
+
+      const formData = new FormData(event.target);
+      const newGameMode = Object.fromEntries(formData);
+
+      fetch(apiUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newGameMode)
+      })
+        .then(response => {
+          if (!response.ok) throw new Error("Failed to add game mode");
+          fetchGameModes(); // Refresh table
+          event.target.reset(); // Clear the form
+        })
+        .catch(error => console.error("Error adding game mode:", error));
+    });
+
+    // Delete a game mode
+    function deleteGameMode(gameModeId) {
+      fetch(`${apiUrl}/${gameModeId}`, {
+        method: "DELETE"
+      })
+        .then(response => {
+          if (!response.ok) throw new Error("Failed to delete game mode");
+          fetchGameModes(); // Refresh table
+        })
+        .catch(error => console.error("Error deleting game mode:", error));
+    }
+
+    // Fetch game modes on page load
+    fetchGameModes();
+  </script>
+</body>
+</html>
