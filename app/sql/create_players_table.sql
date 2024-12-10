@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS players(
     balance INT,
     user_id INT UNSIGNED NOT NULL,
     password VARCHAR(256) NOT NULL,
-    user_name VARCHAR(15) NOT NULL,
+    user_name VARCHAR(15) UNIQUE NOT NULL,
     game_mode_id ENUM('EASY','MEDIUM','HARD') NOT NULL,
     
     FOREIGN KEY (user_id) REFERENCES users(id)

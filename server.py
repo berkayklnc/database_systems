@@ -14,6 +14,8 @@ def create_app():
     app.add_url_rule('/flights', view_func=views.flight_page)
     app.add_url_rule('/login', view_func=auth_views.login_page)
     app.add_url_rule('/login', 'login', auth_views.handle_login, methods=['POST'])
+    app.add_url_rule('/register',view_func=auth_views.register_page)
+    app.add_url_rule('/register','register',auth_views.handle_register,methods=['POST'])
     app.add_url_rule('/logout','logout',auth_views.logout)
     mysql = MySQL(app)
     app.config["mysql"] = mysql

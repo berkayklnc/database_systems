@@ -5,7 +5,7 @@ from app.models.User import UserModel,User
 
 
 class Player:
-    def __init__(self,id, balance, user_id, password, user_name,game_mode_id):
+    def __init__(self, balance, user_id, password, user_name,game_mode_id,id=0):
         self.id = id
         self.balance = balance
         self.user_id = user_id
@@ -34,7 +34,7 @@ class PlayerModel:
         player = cursor.fetchone()
         cursor.close()
         if player:
-            player = Player(player[0], player[1], player[2], player[3],player[4],player[5])
+            player = Player( player[1], player[2], player[3],player[4],player[5],player[0])
             return player
         else:
             return None
