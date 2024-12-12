@@ -1,0 +1,12 @@
+CREATE TABLE IF NOT EXISTS players_plane(
+    id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    is_available BOOLEAN NOT NULL,
+    
+    FOREIGN KEY (plane_id) REFERENCES planes(id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE,
+
+    FOREIGN KEY (player_id) REFERENCES players(id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+);
