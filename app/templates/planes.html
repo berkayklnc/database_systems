@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block title %}Planes{% endblock %}
+{% block content %}
+  <div class="overflow-x-auto my-7">
+    <table class="min-w-full bg-white border border-gray-300 rounded-lg">
+      <thead>
+        <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+          <th class="py-3 px-6 text-left">Plane Name</th>
+          <th class="py-3 px-6 text-left">Chair Number</th>
+          <th class="py-3 px-6 text-left">Price</th>
+          <th class="py-3 px-6 text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-600 text-sm font-light">
+          {% for plane in planes %}
+      <tr class="border-b border-gray-300 hover:bg-gray-100">
+          <td class="py-3 px-6 text-left">{{plane.name}}</td>
+          <td class="py-3 px-6 text-left">{{plane.chair_number}}</td>
+          <td class="py-3 px-6 text-left">{{plane.price}}</td>
+          <td class="py-3 px-6 text-center">
+            <button class="text-green-500 hover:underline ml-2">Buy</button>
+          </td>
+        </tr>
+    {% endfor %}
+
+
+      </tbody>
+    </table>
+  </div>
+
+{% endblock %}

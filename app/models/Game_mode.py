@@ -24,6 +24,7 @@ class GameModeModel:
         cursor.execute("SELECT * FROM game_modes WHERE id = %s", (game_mode_id,))
         game_mode = cursor.fetchone()
         cursor.close()
+        game_mode = GameMode(game_mode[0], game_mode[1], game_mode[2], game_mode[3])
         return game_mode
 
     def add_game_mode(self, game_mode):

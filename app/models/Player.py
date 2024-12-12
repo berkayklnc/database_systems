@@ -1,9 +1,5 @@
 from flask import current_app
 
-from app.models import game_mode
-from app.models.User import UserModel,User
-
-
 class Player:
     def __init__(self, balance, user_id, password, user_name,game_mode_id,id=0):
         self.id = id

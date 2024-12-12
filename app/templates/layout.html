@@ -7,6 +7,25 @@
      <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body>
+  <nav class="bg-gray-800">
+  <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+    <div class="relative flex h-16 items-center justify-between">
+      <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+        <div class="hidden sm:ml-6 sm:block">
+          <div class="flex space-x-4">
+            <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+            <a href="/"  class="rounded-md px-3 py-2 text-sm font-medium {% if request.path == '/' %} bg-gray-900 text-white {% else %} text-gray-300 hover:bg-gray-700 hover:text-white {% endif %} " aria-current="page">Ana Sayfa</a>
+            <a href="/planes" class="rounded-md px-3 py-2 text-sm font-medium {% if request.path == '/planes' %} bg-gray-900 text-white {% else %} text-gray-300 hover:bg-gray-700 hover:text-white {% endif %}">Uçaklar</a>
+            <a href="/flights" class="rounded-md px-3 py-2 text-sm font-medium {% if request.path == '/flights' %} bg-gray-900 text-white {% else %} text-gray-300 hover:bg-gray-700 hover:text-white {% endif %}">Uçuşlar</a>
+          </div>
+        </div>
+      </div>
+      <a class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white" href="{{ url_for('logout') }}">Logout</a>
+    </div>
+  </div>
+
+</nav>
+
     <main>
       <section class="section">
         <div class="content">

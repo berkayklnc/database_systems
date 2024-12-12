@@ -15,6 +15,7 @@ class PlaneModel:
         cursor.execute("SELECT * FROM planes")
         planes = cursor.fetchall()
         cursor.close()
+        planes = [Plane(plane[1], plane[2], plane[3]) for plane in planes]
         return planes
 
     def get_plane_by_id(self, plane_id):
