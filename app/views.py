@@ -1,6 +1,7 @@
-from flask import current_app, render_template, session, redirect, url_for, request, Blueprint
+from flask import current_app, render_template, session, redirect, url_for, request, Blueprint,jsonify
 
 from app.models.Plane import PlaneModel
+from app.models.Player import PlayerModel
 
 main = Blueprint('main', __name__)
 @main.before_app_request
@@ -15,5 +16,9 @@ def flight_page():
     return render_template('flights.html')
 def plane_page():
     planes = PlaneModel().get_all_planes()
-    print(planes)
     return render_template('planes.html',planes=planes)
+def buy_plane(plane_id):
+    plane = PlaneModel().get_plane_by_id(plane_id)
+    player_id = session.get('player_id')
+    PlayerModel().add_plane_to_player(plane.id,player_id)
+    return redirect(url_for('plane_page'))

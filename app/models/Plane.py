@@ -1,10 +1,12 @@
 from flask import current_app
 
 class Plane:
-    def __init__(self, name, chair_number,price):
+    def __init__(self, name, chair_number,price,id=0):
         self.name = name
         self.chair_number = chair_number
         self.price = price
+        self.id = id
+        
 
 class PlaneModel:
     def __init__(self):
@@ -15,7 +17,7 @@ class PlaneModel:
         cursor.execute("SELECT * FROM planes")
         planes = cursor.fetchall()
         cursor.close()
-        planes = [Plane(plane[1], plane[2], plane[3]) for plane in planes]
+        planes = [Plane(plane[1], plane[2], plane[3],plane[0]) for plane in planes]
         return planes
 
     def get_plane_by_id(self, plane_id):
@@ -23,6 +25,7 @@ class PlaneModel:
         cursor.execute("SELECT * FROM planes WHERE id = %s", (plane_id,))
         plane = cursor.fetchone()
         cursor.close()
+        plane =Plane(plane[1], plane[2], plane[3],plane[0])
         return plane
     def add_plane(self, plane):
         cursor = self.mysql.connection.cursor()

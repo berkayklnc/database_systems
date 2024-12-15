@@ -34,3 +34,9 @@ class PlayerModel:
             return player
         else:
             return None
+    def add_plane_to_player(self,plane_id,player_id):
+        cursor = self.mysql.connection.cursor()
+        cursor.execute("INSERT INTO players_plane ( player_id,plane_id ) VALUES (%s,%s)", (player_id, plane_id))
+        self.mysql.connection.commit()
+        cursor.close()
+        # def update balance 

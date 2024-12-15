@@ -18,6 +18,7 @@ def create_app():
     app.add_url_rule('/register',view_func=auth_views.register_page)
     app.add_url_rule('/register','register',auth_views.handle_register,methods=['POST'])
     app.add_url_rule('/logout','logout',auth_views.logout)
+    app.add_url_rule('/plane/<int:plane_id>','buy_plane', views.buy_plane)
     mysql = MySQL(app)
     app.config["mysql"] = mysql
     app.register_blueprint(main)

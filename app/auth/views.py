@@ -14,6 +14,7 @@ def handle_login():
     is_password_correct = check_password_hash(player.password, request.form['password'])
     if is_password_correct:
         session['user_name'] = user_name
+        session['player_id'] = player.id
         return redirect(url_for('home_page'))
     else:
         return render_template('auth/login.html', error="Invalid password")
