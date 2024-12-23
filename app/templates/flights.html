@@ -1,47 +1,189 @@
 {% extends "layout.html" %}
-{% block title %}Home{% endblock %}
+{% block title %}Flights{% endblock %}
 {% block content %}
-    <div class="bg-gray-100 min-h-screen flex items-center justify-center">
-  <div class="bg-white p-8 rounded-lg shadow-lg w-96">
-    <h1 class="text-2xl font-bold text-center mb-6">Flight Search</h1>
-    <form action="#" method="POST" class="space-y-4">
-      <!-- Origin City -->
-      <div>
-        <label for="origin" class="block text-sm font-medium text-gray-700">Origin City</label>
-        <select id="origin" name="origin" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-          <option value="istanbul">Istanbul</option>
-          <option value="london">London</option>
-          <option value="paris">Paris</option>
-          <option value="newyork">New York</option>
-        </select>
-      </div>
+<div class="bg-white rounded-lg shadow-lg p-8 m-auto mt-10 w-full max-w-4xl">
 
-      <!-- Destination City -->
-      <div>
-        <label for="destination" class="block text-sm font-medium text-gray-700">Destination City</label>
-        <select id="destination" name="destination" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-          <option value="istanbul">Istanbul</option>
-          <option value="london">London</option>
-          <option value="paris">Paris</option>
-          <option value="newyork">New York</option>
-        </select>
-      </div>
+    <form class="space-y-6"  action="{{url_for('flight_page')}}" method="POST">
+        <h1 class="text-2xl font-bold text-gray-800 text-center">Uçak Arama</h1>
+        {{ form.hidden_tag() }}
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="relative">
+                <label for="origin-input" class="block text-sm font-medium text-gray-700 mb-2">Select
+                Origin</label>
+                <div>
+                    <input
+                            type="text"
+                            name="origin_city"
+                            id="origin-input"
+                            placeholder="Search Origin..."
+                            class="block w-full px-4 py-2 text-gray-900 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            onkeyup="filterOptions('origin')"
+                    />
+                </div>
+                <ul id="origin-dropdown"
+                    class="absolute z-10 mt-2 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto hidden">
+                </ul>
+            </div>
 
-      <!-- Flight Date -->
-      <div>
-        <label for="flightDate" class="block text-sm font-medium text-gray-700">Flight Date</label>
-        <input type="date" id="flightDate" name="flightDate" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
-      </div>
+            <div class="relative">
+                <label for="destination-input" class="block text-sm font-medium text-gray-700 mb-2">Select
+                Destination</label>
+                <div>
+                    <input
+                            type="text"
+                            id="destination-input"
+                            name="dest_city"
+                            placeholder="Search Destination..."
+                            class="block w-full px-4 py-2 text-gray-900 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            onkeyup="filterOptions('destination')"
+                    />
+                </div>
+                <ul id="destination-dropdown"
+                    class="absolute z-10 mt-2 w-full bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto hidden"></ul>
+            </div>
 
-      <!-- Submit Button -->
-      <div>
-        <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
-          Search Flights
-        </button>
-      </div>
+            <div>
+                <label for="departure-date" class="block text-sm font-medium text-gray-700">Kalkış Tarihi</label>
+                <input type="date" id="departure-date" name="flight_time"
+                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-4">
+            <input type="checkbox" id="direct-flights" name="is_direct"
+                   class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+            <label for="direct-flights" class="text-sm font-medium text-gray-700">Aktarmasız uçuşlar</label>
+        </div>
+
+
+        <div class="text-center">
+            <button type="submit"
+                    class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                Ara
+            </button>
+        </div>
     </form>
-  </div>
-  </div>
+
+
+</div>
+    {% if flights %}
+    <section class="flights-section py-8">
+    <div class="max-w-7xl mx-auto px-6 sm:px-6 lg:px-8">
+      <h2 class="text-2xl font-semibold text-gray-900 mb-6">Uçuş Seçenekleri</h2>
+
+
+      <!-- Uçuşlar varsa tabloyu göster -->
+      <div class="bg-white shadow-lg rounded-lg p-6">
+        <table class="min-w-full table-auto">
+          <thead>
+            <tr class="text-left border-b">
+              <th class="py-3 px-4 font-medium text-gray-700">Kalkış Şehri</th>
+              <th class="py-3 px-4 font-medium text-gray-700">Varış Şehri</th>
+              <th class="py-3 px-4 font-medium text-gray-700">Kalkış Zamanı</th>
+              <th class="py-3 px-4 font-medium text-gray-700">Ekonomi Fiyatı</th>
+              <th class="py-3 px-4 font-medium text-gray-700">Business Fiyatı</th>
+              <th class="py-3 px-4 font-medium text-gray-700">Rezervasyon</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for flight in flights %}
+            <tr class="border-b hover:bg-gray-100">
+              <td class="py-3 px-4 text-gray-800">{{ flight.origin_city }}</td>
+              <td class="py-3 px-4 text-gray-800">{{ flight.dest_city }}</td>
+              <td class="py-3 px-4 text-gray-800">{{ flight.flight_time.strftime('%Y-%m-%d %H:%M') }}</td>
+              <td class="py-3 px-4 text-gray-800">{{ flight.economy_ticket_price }} USD</td>
+              <td class="py-3 px-4 text-gray-800">{{ flight.business_ticket_price }} USD</td>
+              <td class="py-3 px-4">
+                <button class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-700">Rezervasyon Yap</button>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% endif %}
+    </div>
+  </section>
+<script>
+    // Fetch states data from Flask API
+    async function fetchStates(filterTerm = '') {
+        const response = await fetch(`/states?filter=${filterTerm}`);
+        const states = await response.json();
+        return states;
+    }
+
+    // Populate dropdown with states for origin or destination
+    // Populate dropdown with states for origin or destination
+    async function populateDropdown(type) {
+        const dropdown = document.getElementById(type + '-dropdown');
+        const input = document.getElementById(type + '-input');
+        const filter = input.value.trim();
+        const states = await fetchStates(filter);
+
+        // Clear previous options
+        dropdown.innerHTML = '';
+
+        // Limit to 5 options
+        states.slice(0, 5).forEach(state => {
+            const li = document.createElement('li');
+            li.classList.add('px-4', 'py-2', 'text-gray-700', 'cursor-pointer', 'hover:bg-gray-100');
+            li.textContent = state;
+
+            // Add click handler to select the option
+            li.addEventListener('click', () => {
+                handleOptionSelect(type, state);
+            });
+
+            dropdown.appendChild(li);
+        });
+
+        // Show the dropdown
+        dropdown.classList.remove('hidden');
+    }
+
+    // Filter options based on input value
+    function filterOptions(type) {
+        populateDropdown(type);
+    }
+
+    // Handle option selection for origin or destination
+    function handleOptionSelect(type, selectedState) {
+        const input = document.getElementById(type + '-input');
+        input.value = selectedState;
+        document.getElementById(type + '-dropdown').classList.add('hidden');
+    }
+
+    // Show dropdown on input focus
+    document.getElementById('origin-input').addEventListener('focus', () => {
+        populateDropdown('origin');
+    });
+
+    document.getElementById('destination-input').addEventListener('focus', () => {
+        populateDropdown('destination');
+    });
+
+    // Hide dropdown on input blur
+    document.getElementById('origin-input').addEventListener('blur', () => {
+        setTimeout(() => document.getElementById('origin-dropdown').classList.add('hidden'), 150);
+    });
+
+    document.getElementById('destination-input').addEventListener('blur', () => {
+        setTimeout(() => document.getElementById('destination-dropdown').classList.add('hidden'), 150);
+    });
+
+        // Tarih formatlayıcı: YYYY-MM-DD
+        function formatDateToInput(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+        // Kalkış tarihini ayarla
+        const departureInput = document.getElementById('departure-date');
+        const initialDate = new Date();
+        departureInput.value = formatDateToInput(initialDate);
+</script>
 
 {% endblock %}
 

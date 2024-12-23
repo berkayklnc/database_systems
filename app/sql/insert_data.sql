@@ -1,3 +1,6 @@
+INSERT INTO users (name, surname, gender)
+VALUES ('Test22', 'Test', 'male');
+
 INSERT INTO game_modes (id, chance, coin_multiplier, first_balance)
 VALUES('EASY', 0.90, 2.0, 100000),
       ('MEDIUM', 0.75, 1.5, 75000),
@@ -21,3 +24,7 @@ VALUES
   ('Gulfstream G650', 18, 650),
   ('Concorde', 92, 1200),
   ('Boeing 777', 396, 3900);
+
+INSERT INTO players_plane (plane_id, player_id)
+Values (1, (SELECT id FROM users WHERE name = 'Test' AND surname = 'Test'));
+
