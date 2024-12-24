@@ -1,0 +1,93 @@
+{% extends "layout.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<div class="max-w-4xl mx-auto mt-10 p-8 bg-white rounded-lg shadow-lg">
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-semibold text-gray-800">
+        Profilinizi Düzenleyin
+      </h1>
+    </div>
+
+    <form action="#" method="POST" class="space-y-6">
+      <!-- Name -->
+      <div>
+        <label for="name" class="block text-sm font-medium text-gray-700"
+          >Ad</label
+        >
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value="{{user[1]}}"
+          required
+          class="mt-1 block w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        />
+      </div>
+
+      <!-- Surname -->
+      <div>
+        <label for="surname" class="block text-sm font-medium text-gray-700"
+          >Soyad</label
+        >
+        <input
+          type="text"
+          id="surname"
+          name="surname"
+          value="{{user[2]}}"
+          required
+          class="mt-1 block w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        />
+      </div>
+
+      <!-- Username -->
+      <div>
+        <label for="username" class="block text-sm font-medium text-gray-700"
+          >Kullanıcı Adı</label
+        >
+        <input
+          type="text"
+          id="username"
+          name="username"
+          value="{{player.user_name}}"
+          required
+          class="mt-1 block w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        />
+      </div>
+
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700"
+          >Şifre</label
+        >
+        <input
+          type="password"
+          id="password"
+          name="password"
+          required
+          class="mt-1 block w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+        />
+      </div>
+
+      <!-- Buttons: Save and Delete -->
+      <div class="flex justify-between mt-6">
+        <!-- Delete User Button -->
+        <form action="#" method="POST">
+          <button
+            type="submit"
+            class="bg-red-600 text-white font-semibold py-2 px-4 rounded-md shadow-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
+          >
+            Kullanıcıyı Sil
+          </button>
+        </form>
+
+        <div class="">
+          <button
+            type="submit"
+            class="bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50"
+          >
+            Kaydet
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock %}

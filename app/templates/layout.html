@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>My movies - {% block title %}{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet" />
-     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    
     <style>body{background: linear-gradient(to right, #dedede, #ffffff);}</style>
   </head>
   <body>
@@ -26,10 +27,15 @@
           </div>
         </div>
       </div>
-      <a class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white" href="{{ url_for('logout') }}">Logout</a>
+      <div class="flex items-center space-x-4">
+        <a href="/profile" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white flex items-center">
+          <i class="fas fa-user-circle text-lg"></i>
+          <span class="ml-2 text-sm">Profilim</span>
+        </a>
+        <a class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white" href="{{ url_for('logout') }}">Logout</a>
+      </div>
     </div>
   </div>
-
 </nav>
 
     <main>
@@ -39,6 +45,7 @@
         </div>
       </section>
     </main>
+
 <script>
   // Flask'tan gelen hatalar
   const errors = {{ errors | default({}) | tojson }};

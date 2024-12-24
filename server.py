@@ -8,7 +8,7 @@ from flask_mysqldb import MySQL
 from app.views import main
 from flask_cors import CORS
 def create_app():
-    app = Flask(__name__,template_folder='app/templates')
+    app = Flask(__name__,template_folder='app/templates',static_folder='app/static')
     CORS(app)
     app.json.ensure_ascii = False
     app.config.from_object('settings')
@@ -22,6 +22,7 @@ def create_app():
     app.add_url_rule('/logout','logout',auth_views.logout)
     app.add_url_rule('/plane/<int:plane_id>','buy_plane', views.buy_plane)
     app.add_url_rule('/states', view_func=views.get_states)
+    app.add_url_rule('/profile', view_func=views.profile_page)
     mysql = MySQL(app)
     app.config["mysql"] = mysql
     app.register_blueprint(main)
