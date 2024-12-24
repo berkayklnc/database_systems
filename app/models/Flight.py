@@ -1,5 +1,6 @@
 from flask import current_app
-
+import time
+import random
 class Flight:
     def __init__(
         self,
@@ -59,6 +60,7 @@ class FlightModel:
     def delete_flight_by_id(self,id):
         cursor=self.mysql.connection.cursor()
         cursor.execute("DELETE * FROM flights WHERE id=%s",(id))
+        self.mysql.connection.commit()
         flight=cursor.fetchnone()
         cursor.close()
         return flight
@@ -68,3 +70,45 @@ class FlightModel:
         flights=cursor.fetchall()
         cursor.close()
         return flights
+    def fill_flight(self,origin_code,dest_code,base,chance,flight_id,player_id):
+        cursor=self.mysql.connection.cursor()
+        route=origin_code+'-'+dest_code
+        cursor.execute("SELECT ratio FROM priors WHERE route=%s",(route,))
+        ratio=cursor.fetchone()
+        cursor.close()
+        ratio=ratio[0]
+        passengers=0
+        cursor=self.mysql.connection.cursor()
+        cursor.execute("SELECT chair_number FROM planes WHERE id=(SELECT plane_id FROM players_plane WHERE id=(SELECT player_plane_id FROM flights WHERE id=%s))",(flight_id,))
+        seats=cursor.fetchone()
+        cursor.close()
+        seats=seats[0]
+        if ratio==0:
+            per_second=2
+        else:
+            per_second=60/(base*ratio)  #MEDİUM BASE 80 EASY BASE 100 HARD BASE 60
+        duration = 107
+        start_time = time.time()
+        while time.time() - start_time < duration:
+            if passengers<=seats:
+                if random.random() < chance:  # Random chance based on y
+                    cursor=self.mysql.connection.cursor()
+                    cursor.execute("UPDATE flights SET passengers=passengers+1 WHERE id=%s",(flight_id,))
+                    self.mysql.connection.commit()
+                    cursor.close()
+                    passengers=passengers+1
+                time.sleep(per_second)  
+        economy_pass=int(float(passengers)*0.7)
+        business_pass=passengers-economy_pass
+        cursor=self.mysql.connection.cursor()
+        cursor.execute("SELECT business_ticket_price,economy_ticket_price FROM flights WHERE id=%s",(flight_id,))
+        prices=cursor.fetchone()
+        cursor.close()
+        economy=prices[1]
+        business=prices[0]
+        gain_eco=economy*economy_pass
+        gain_busi=business*business_pass
+        gain=gain_eco+gain_busi
+        cursor=self.mysql.connection.cursor()
+        cursor.execute("UPDATE players SET balance=balance+%s WHERE id=%s",(gain,player_id))
+

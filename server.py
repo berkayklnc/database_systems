@@ -22,6 +22,7 @@ def create_app():
     app.add_url_rule('/logout','logout',auth_views.logout)
     app.add_url_rule('/plane/<int:plane_id>','buy_plane', views.buy_plane)
     app.add_url_rule('/states', view_func=views.get_states)
+    app.add_url_rule('/flights/add',view_func=views.add_flight)
     app.add_url_rule('/profile', view_func=views.profile_page)
     mysql = MySQL(app)
     app.config["mysql"] = mysql

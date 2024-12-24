@@ -24,6 +24,10 @@ class PlayerModel:
         cursor = self.mysql.connection.cursor()
         cursor.execute("INSERT INTO players (balance, user_id, password, user_name, game_mode_id) VALUES (%s, %s, %s, %s,%s)", (player.balance, player.user_id, player.password,player.user_name,player.game_mode_id))
         self.mysql.connection.commit()
+        player_id = cursor.lastrowid
+        cursor.close()
+        cursor = self.mysql.connection.cursor()
+        cursor.execute("INSERT INTO game_times (player_id,game_mode_id,game_time,game_name) VALUES (%s,%s,'2024-01-01','fun_game')",(player_id,player.game_mode_id))
     def get_player_by_user_name(self, user_name):
         cursor = self.mysql.connection.cursor()
         cursor.execute("SELECT * FROM players WHERE user_name=%s", (user_name,))
