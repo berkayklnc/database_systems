@@ -1,27 +1,32 @@
 {% extends "layout.html" %}
 {% block title %}Planes{% endblock %}
 {% block content %}
-  <div class="overflow-x-auto my-7">
-    <table class="min-w-full bg-white border border-gray-300 rounded-lg">
-      <thead>
-        <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-          <th class="py-3 px-6 text-left">Plane Name</th>
-          <th class="py-3 px-6 text-left">Chair Number</th>
-          <th class="py-3 px-6 text-left">Price</th>
-          <th class="py-3 px-6 text-center">Actions</th>
-        </tr>
-      </thead>
-      <tbody class="text-gray-600 text-sm font-light">
-          {% for plane in planes %}
-      <tr class="border-b border-gray-300 hover:bg-gray-100">
-          <td class="py-3 px-6 text-left">{{plane.name}}</td>
-          <td class="py-3 px-6 text-left">{{plane.chair_number}}</td>
-          <td class="py-3 px-6 text-left">{{plane.price}}</td>
-          <td class="py-3 px-6 text-center">
-            <a href="{{ url_for('buy_plane', plane_id=plane.id) }}" class="text-green-500 hover:underline ml-2">Buy</a>
-          </td>
-        </tr>
-    {% endfor %}
+    <div class="container mx-auto px-4 py-8">
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {% for plane in planes %}
+        <div class="bg-white shadow-md rounded-lg flex flex-col">
+          <img
+            class="w-full h-48 object-cover rounded-t-lg"
+            src="{{ url_for('static', filename='img/thy.png') }}"
+            alt="Boeing 737 Görseli"
+          />
+          <div class="flex-1 p-4">
+            <h2 class="text-xl font-semibold text-gray-800">{{plane.name}}</h2>
+            <p class="text-gray-600 text-sm">Yolcu Kapasitesi: {{plane.chair_number}}</p>
+            <p class="text-gray-600 text-sm">Durumu: Aktif</p>
+            <p style="margin-bottom: 10px;" class="text-blue-600 font-bold text-lg">Fiyat: ${{plane.price}}</p>
+            <a
+              href="{{url_for('buy_plane',plane_id=plane.id)}}"
+              class="bg-green-500 text-white px-4 py-2 text-sm rounded-md hover:bg-green-600 mt-6 self-start"
+              >Satın Al</a
+            >
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
 
 
       </tbody>

@@ -9,6 +9,7 @@ from wtforms import StringField, IntegerField, FloatField, DateTimeField
 
 from app.models.Plane import PlaneModel
 from app.models.Player import PlayerModel
+from app.models.User import UserModel
 import json
 main = Blueprint('main', __name__)
 @main.before_app_request
@@ -30,9 +31,8 @@ def flight_page():
     transfered_flights=[]
     if form.validate():
         if not request.form.get('is_direct'):
-            transfered_flights.extend(FlightModel().get_transfered_flights(form.origin_city.data, form.dest_city.data, form.flight_time.data))
-            return jsonify(transfered_flights)
-        flights.extend(FlightModel().get_direct_flights(form.origin_city.data, form.dest_city.data, form.flight_time.data))
+            transfered_flights=FlightModel().get_transfered_flights(form.origin_city.data, form.dest_city.data, form.flight_time.data)
+        direct_flights=FlightModel().get_direct_flights(form.origin_city.data, form.dest_city.data, form.flight_time.data)
         transfered_flights=[
             {
                 'id_1':tranfered[0],
@@ -42,18 +42,22 @@ def flight_page():
                 'dest_city':tranfered[4],
                 'origin_code':tranfered[5],
                 'dest_code':tranfered[6],
-                'first_time':tranfered[7],
-                'second_time':tranfered[8],
+                'first_flight_time':tranfered[7],
+                'second_flight_time':tranfered[8],
                 'first_pp_id':tranfered[9],
                 'second_pp_id':tranfered[10],
                 'f1_passenger':tranfered[11],
-                'f2_pasenger':tranfered[12],
-                'economy_ticket_price':tranfered[13],
-                'business_ticket_price':tranfered[14]
+                'f2_passenger':tranfered[12],
+                'first_economy_ticket_price':tranfered[13],
+                'second_economy_ticket_price':tranfered[14],
+                'first_business_ticket_price':tranfered[15],
+                'second_business_ticket_price':tranfered[16],
+                'first_travel_time': tranfered[17],
+                'second_travel_time':tranfered[18]
             }
             for tranfered in transfered_flights
         ]
-        flights = [
+        direct_flights = [
             {
                 'id': flight[0],
                 'origin_city': flight[1],
@@ -67,10 +71,9 @@ def flight_page():
                 'economy_ticket_price': flight[9],
                 'business_ticket_price': flight[10],
             }
-            for flight in flights
+            for flight in direct_flights
         ]
-    print(form.errors)
-    return render_template('flights.html',states=states,form=form,errors=form.errors,flights=flights)
+    return render_template('flights.html',states=states,form=form,errors=form.errors,direct_flights=direct_flights,transfered_flights=transfered_flights)
 def plane_page(errors={}):
     planes = PlaneModel().get_all_planes()
     return render_template('planes.html',planes=planes,errors=errors)
@@ -85,6 +88,13 @@ def buy_plane(plane_id):
     else: 
         errors={'balance': ['Is not enough']}
     return plane_page(errors=errors)
+
+def profile_page():
+    user_name = session.get('user_name')
+    player=PlayerModel().get_player_by_user_name(user_name)
+    user = UserModel().get_user_by_id(player.user_id)
+    return render_template('profile.html',player=player,user=user)
+
 
 def load_states():
     with open('app/helpers/states.json', 'r') as file:
