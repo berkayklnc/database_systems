@@ -18,7 +18,8 @@ def before_request():
 def home_page():
     user_name = session.get('user_name')
     return render_template('home.html',user_name=user_name)
-    
+def add_flight():
+    return render_template('flight_modal.html')    
 def flight_page():
     form = FlightForm()
     states = load_states()
