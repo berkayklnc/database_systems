@@ -29,4 +29,4 @@ def setup_database():
         execute_sql_file('app/sql/create_game_times_table.sql')
         execute_sql_file('app/sql/create_players_plane_table.sql')
         execute_sql_file('app/sql/create_flights_table.sql')
-        execute_sql_file('app/sql/insert_data.sql')
+        execute_sql_file('app/sql/create_priors_table.sql')

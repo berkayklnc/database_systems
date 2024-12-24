@@ -3,6 +3,7 @@ from app import views
 from app.auth import views as auth_views
 from app.auth.views import logout
 from app.helpers.execute_sql import setup_database
+from app.helpers.insertion import insertData
 from flask_mysqldb import MySQL
 from app.views import main
 from flask_cors import CORS
@@ -26,6 +27,7 @@ def create_app():
     app.register_blueprint(main)
     with app.app_context():
         setup_database()
+        insertData()
     return app
 
 if __name__ == '__main__':

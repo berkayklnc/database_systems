@@ -26,9 +26,11 @@ def flight_page():
         return render_template('flights.html',states=states,form=form)
     form = FlightForm(request.form)
     flights = []
+    transfered_flights=[]
     if form.validate():
         if not request.form.get('is_direct'):
-            flights.extend(FlightModel().get_transfered_flights(form.origin_city.data, form.dest_city.data, form.flight_time.data))
+            transfered_flights.extend(FlightModel().get_transfered_flights(form.origin_city.data, form.dest_city.data, form.flight_time.data))
+            return jsonify(flights)
         flights.extend(FlightModel().get_direct_flights(form.origin_city.data, form.dest_city.data, form.flight_time.data))
         
         flights = [
@@ -36,11 +38,14 @@ def flight_page():
                 'id': flight[0],
                 'origin_city': flight[1],
                 'dest_city': flight[2],
-                'flight_time': flight[3],
-                'travel_time': flight[4],
-                'player_plane_id': flight[5],
-                'economy_ticket_price': flight[6],
-                'business_ticket_price': flight[7],
+                'origin_code':flight[3],
+                'dest_code':flight[4],
+                'flight_time': flight[5],
+                'travel_time': flight[6],
+                'player_plane_id': flight[7],
+                'passengers':flight[8],
+                'economy_ticket_price': flight[9],
+                'business_ticket_price': flight[10],
             }
             for flight in flights
         ]
