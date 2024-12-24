@@ -77,6 +77,7 @@ def buy_plane(plane_id):
     plane = PlaneModel().get_plane_by_id(plane_id)
     player_id = session.get('player_id')
     balance=PlayerModel().get_balance(player_id=player_id)
+    errors={}
     if balance>=plane.price:
         PlayerModel().update_balance(player_id=player_id,add=False,amount=plane.price)
         PlayerModel().add_plane_to_player(plane.id,player_id)
