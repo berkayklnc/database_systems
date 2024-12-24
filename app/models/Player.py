@@ -39,4 +39,18 @@ class PlayerModel:
         cursor.execute("INSERT INTO players_plane ( player_id,plane_id ) VALUES (%s,%s)", (player_id, plane_id))
         self.mysql.connection.commit()
         cursor.close()
-        # def update balance 
+
+    def update_balance(self,player_id,add,amount): 
+        cursor=self.mysql.connection.cursor()
+        if add:
+            cursor.execute("UPDATE players SET balance=balance+%s WHERE id=%s",(amount,player_id))
+        else:
+            cursor.execute("UPDATE players SET balance=balance-%s WHERE id=%s",(amount,player_id))
+        self.mysql.connection.commit()
+        cursor.close()
+    def get_balance(self,player_id):
+        cursor=self.mysql.connection.cursor()
+        cursor.execute("SELECT balance FROM players WHERE id=%s",(player_id,))
+        balance=cursor.fetchone()
+        cursor.close()
+        return balance[0]

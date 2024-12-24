@@ -30,9 +30,28 @@ def flight_page():
     if form.validate():
         if not request.form.get('is_direct'):
             transfered_flights.extend(FlightModel().get_transfered_flights(form.origin_city.data, form.dest_city.data, form.flight_time.data))
-            return jsonify(flights)
+            return jsonify(transfered_flights)
         flights.extend(FlightModel().get_direct_flights(form.origin_city.data, form.dest_city.data, form.flight_time.data))
-        
+        transfered_flights=[
+            {
+                'id_1':tranfered[0],
+                'id_2':tranfered[1],
+                'origin_city':tranfered[2],
+                'transfer':tranfered[3],
+                'dest_city':tranfered[4],
+                'origin_code':tranfered[5],
+                'dest_code':tranfered[6],
+                'first_time':tranfered[7],
+                'second_time':tranfered[8],
+                'first_pp_id':tranfered[9],
+                'second_pp_id':tranfered[10],
+                'f1_passenger':tranfered[11],
+                'f2_pasenger':tranfered[12],
+                'economy_ticket_price':tranfered[13],
+                'business_ticket_price':tranfered[14]
+            }
+            for tranfered in transfered_flights
+        ]
         flights = [
             {
                 'id': flight[0],
@@ -49,15 +68,21 @@ def flight_page():
             }
             for flight in flights
         ]
+    print(form.errors)
     return render_template('flights.html',states=states,form=form,errors=form.errors,flights=flights)
-def plane_page():
+def plane_page(errors={}):
     planes = PlaneModel().get_all_planes()
-    return render_template('planes.html',planes=planes)
+    return render_template('planes.html',planes=planes,errors=errors)
 def buy_plane(plane_id):
     plane = PlaneModel().get_plane_by_id(plane_id)
     player_id = session.get('player_id')
-    PlayerModel().add_plane_to_player(plane.id,player_id)
-    return redirect(url_for('plane_page'))
+    balance=PlayerModel().get_balance(player_id=player_id)
+    if balance>=plane.price:
+        PlayerModel().update_balance(player_id=player_id,add=False,amount=plane.price)
+        PlayerModel().add_plane_to_player(plane.id,player_id)
+    else: 
+        errors={'balance': ['Is not enough']}
+    return plane_page(errors=errors)
 
 def load_states():
     with open('app/helpers/states.json', 'r') as file:

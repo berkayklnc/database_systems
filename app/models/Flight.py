@@ -52,7 +52,7 @@ class FlightModel:
         return flight_id
     def get_direct_flights(self,origin,destination,flight_time):
         cursor=self.mysql.connection.cursor()
-        cursor.execute("SELECT * FROM flights WHERE dest_city=%s AND origin_city=%s AND flight_time>= %s LIMIT 20",(destination,origin,flight_time))
+        cursor.execute("SELECT * FROM flights WHERE dest_city=%s AND origin_city=%s AND flight_time>= %s ORDER BY business_ticket_price LIMIT 20",(destination,origin,flight_time))
         flights=cursor.fetchall()
         cursor.close()
         return flights
@@ -64,7 +64,7 @@ class FlightModel:
         return flight
     def get_transfered_flights(self,origin,destination,flight_time):
         cursor=self.mysql.connection.cursor()
-        cursor.execute("SELECT f1.id,f2.id,f1.origin_city as origin_city,f1.dest_city as transfer,f2.dest_city as dest_city,f1.origin_code as origin_code,f2.dest_code as dest_code,f1.flight_time as first_time,f2.flight_time as second_time,f1.player_plane_id,f2.player_plane_id,f1.passengers,f2.passengers,f1.economy_ticket_price+f2.economy_ticket_price,f1.business_ticket_price+f2.business_ticket_price FROM flights f1 INNER JOIN flights f2 ON f1.dest_city=f2.origin_city WHERE f1.origin_city=%s AND f2.dest_city=%s AND f1.flight_time>= %s AND f2.flight_time > (f1.flight_time + INTERVAL f1.travel_time MINUTE) LIMIT 1",(origin,destination,flight_time))
+        cursor.execute("SELECT f1.id,f2.id,f1.origin_city as origin_city,f1.dest_city as transfer,f2.dest_city as dest_city,f1.origin_code as origin_code,f2.dest_code as dest_code,f1.flight_time as first_time,f2.flight_time as second_time,f1.player_plane_id,f2.player_plane_id,f1.passengers,f2.passengers,f1.economy_ticket_price+f2.economy_ticket_price economy,f1.business_ticket_price+f2.business_ticket_price as business FROM flights f1 INNER JOIN flights f2 ON f1.dest_city=f2.origin_city WHERE f1.origin_city=%s AND f2.dest_city=%s AND f1.flight_time>= %s AND f2.flight_time > (f1.flight_time + INTERVAL f1.travel_time MINUTE) ORDER BY business LIMIT 10",(origin,destination,flight_time))
         flights=cursor.fetchall()
         cursor.close()
         return flights
