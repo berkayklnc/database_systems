@@ -28,6 +28,8 @@ class PlayerModel:
         cursor.close()
         cursor = self.mysql.connection.cursor()
         cursor.execute("INSERT INTO game_times (player_id,game_mode_id,game_time,game_name) VALUES (%s,%s,'2024-01-01','fun_game')",(player_id,player.game_mode_id))
+        self.mysql.connection.commit()
+        cursor.close()
     def get_player_by_user_name(self, user_name):
         cursor = self.mysql.connection.cursor()
         cursor.execute("SELECT * FROM players WHERE user_name=%s", (user_name,))

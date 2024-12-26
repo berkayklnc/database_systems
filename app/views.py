@@ -28,7 +28,7 @@ def flight_page():
     if request.method == "GET":
         return render_template('flights.html',states=states,form=form)
     form = FlightForm(request.form)
-    flights = []
+    direct_flights = []
     transfered_flights=[]
     if form.validate():
         if not request.form.get('is_direct'):

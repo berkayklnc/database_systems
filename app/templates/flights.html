@@ -254,7 +254,7 @@
         dropdown.innerHTML = '';
 
         // Limit to 5 options
-        states.slice(0, 5).forEach(state => {
+        states.forEach(state => {
             const li = document.createElement('li');
             li.classList.add('px-4', 'py-2', 'text-gray-700', 'cursor-pointer', 'hover:bg-gray-100');
             li.textContent = state;
