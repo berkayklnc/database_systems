@@ -1,70 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>My movies - {% block title %}{% endblock %}</title>
-    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-    
-    <style>body{background: linear-gradient(to right, #dedede, #ffffff);}</style>
-  </head>
-  <body>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>My movies - {% block title %}{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background: linear-gradient(to right, #dedede, #ffffff);
+    }
+  </style>
+</head>
+
+<body>
   <nav class="bg-gray-800">
-  <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-    <div class="relative flex h-16 items-center justify-between">
-      <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-        <div class="hidden sm:ml-6 sm:block">
-          <div class="flex space-x-4">
-            <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-            <a href="/"  class="rounded-md px-3 py-2 text-sm font-medium {% if request.path == '/' %} bg-gray-900 text-white {% else %} text-gray-300 hover:bg-gray-700 hover:text-white {% endif %} " aria-current="page">Ana Sayfa</a>
-            <a href="/planes" class="rounded-md px-3 py-2 text-sm font-medium {% if request.path == '/planes' %} bg-gray-900 text-white {% else %} text-gray-300 hover:bg-gray-700 hover:text-white {% endif %}">Uçaklar</a>
-            <a href="/flights" class="rounded-md px-3 py-2 text-sm font-medium {% if request.path == '/flights' %} bg-gray-900 text-white {% else %} text-gray-300 hover:bg-gray-700 hover:text-white {% endif %}">Uçuşlar</a>
+    <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+      <div class="relative flex h-16 items-center justify-between">
+        <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+          <div class="hidden sm:ml-6 sm:block">
+            <div class="flex space-x-4">
+              <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+              <a href="/"
+                class="rounded-md px-3 py-2 text-sm font-medium {% if request.path == '/' %} bg-gray-900 text-white {% else %} text-gray-300 hover:bg-gray-700 hover:text-white {% endif %} "
+                aria-current="page">Ana Sayfa</a>
+              <a href="/planes"
+                class="rounded-md px-3 py-2 text-sm font-medium {% if request.path == '/planes' %} bg-gray-900 text-white {% else %} text-gray-300 hover:bg-gray-700 hover:text-white {% endif %}">Uçaklar</a>
+              <a href="/flights"
+                class="rounded-md px-3 py-2 text-sm font-medium {% if request.path == '/flights' %} bg-gray-900 text-white {% else %} text-gray-300 hover:bg-gray-700 hover:text-white {% endif %}">Uçuşlar</a>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="flex items-center space-x-4">
-        <a href="/profile" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white flex items-center">
-          <i class="fas fa-user-circle text-lg"></i>
-          <span class="ml-2 text-sm">Profilim</span>
-        </a>
-        <a class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white" href="{{ url_for('logout') }}">Logout</a>
+        <div class="flex items-center space-x-4">
+          <p id="game_time" class="text-white"></p>
+          <i id="toggleIcon" class="fas fa-pause text-white" style="cursor: pointer;"></i>
+
+          <a href="/profile"
+            class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white flex items-center">
+            <i class="fas fa-user-circle text-lg"></i>
+            <span class="ml-2 text-sm">Profilim</span>
+          </a>
+          <a class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white"
+            href="{{ url_for('logout') }}">Logout</a>
+        </div>
       </div>
     </div>
-  </div>
-</nav>
+  </nav>
 
-    <main>
-      <section class="section">
-        <div class="content">
-          {% block content %}{% endblock %}
-        </div>
-      </section>
-    </main>
+  <main>
+    <section class="section">
+      <div class="content">
+        {% block content %}{% endblock %}
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Flask'tan gelen hatalar
+    const errors = {{ errors | default ({}) | tojson }};
+
+    if (Object.keys(errors).length > 0) {
+      for (const [field, messages] of Object.entries(errors)) {
+        messages.forEach(message => {
+          Toastify({
+            text: `${field}: ${message}`,
+            duration: 5000,
+            close: true,
+            gravity: "bottom",
+            position: "right",
+            backgroundColor: "rgb(220, 38, 38)",
+          }).showToast();
+        });
+      }
+    }
+  </script>
 
 <script>
-  // Flask'tan gelen hatalar
-  const errors = {{ errors | default({}) | tojson }};
+  // Başlangıç zamanı
+  let gameTimeString = '{{ session.get('game_time') }}';  // "2024-01-01 22:00:00" gibi bir değer alır
+  let gameTime = new Date(gameTimeString);
+  let interval;
 
-  if (Object.keys(errors).length > 0) {
-    for (const [field, messages] of Object.entries(errors)) {
-      messages.forEach(message => {
-        Toastify({
-          text: `${field}: ${message}`,
-          duration: 5000,
-          close: true,
-          gravity: "bottom",
-          position: "right",
-          backgroundColor: "rgb(220, 38, 38)",
-        }).showToast();
-      });
+  // Gün, ay, yıl değerlerini al
+  function formatDate() {
+    let day = gameTime.getDate().toString().padStart(2, '0'); // Gün
+    let month = (gameTime.getMonth() + 1).toString().padStart(2, '0'); // Ay (0-11 arası olduğu için 1 ekliyoruz)
+    let year = gameTime.getFullYear(); // Yıl
+
+    // İstenilen formatta tarihi oluştur: dd.mm.yyyy
+    return `${day}.${month}.${year}`;
+  }
+
+  // Başlangıç zamanını HTML'de göster
+  document.getElementById('game_time').innerText = formatDate();
+
+  // Tarihi güncelleyen fonksiyon
+  function updateGameTime() {
+    // 1 saat ekle
+    gameTime.setHours(gameTime.getHours() + 24);
+
+    // HTML'deki zamanı güncelle
+    document.getElementById("game_time").innerText = formatDate();
+
+    // Zamanı sunucuya gönder
+    sendTimeToServer();
+  }
+
+  // Sunucuya zaman gönderme fonksiyonu
+  function sendTimeToServer() {
+    fetch('/update_time', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ date: gameTime.toISOString() })
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Zaman sunucuya gönderildi:', data);
+    })
+    .catch((error) => {
+      console.error('Hata:', error);
+    });
+  }
+
+  // Pause durumunu sunucuya gönderme
+  function sendPauseStatus(isPaused) {
+    fetch('/toggle_pause', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ is_paused: isPaused })
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Pause durumu sunucuya gönderildi:', data);
+    })
+    .catch((error) => {
+      console.error('Hata:', error);
+    });
+  }
+
+  // Oyun zamanını başlat/durdur
+  function toggleGameTime() {
+    const toggleIcon = document.getElementById("toggleIcon");
+    if (interval) {
+      clearInterval(interval);  // Eğer zaman güncelleniyorsa, durdur
+      interval = null;
+      toggleIcon.classList.remove("fa-pause");
+      toggleIcon.classList.add("fa-play"); // Play ikonuna geç
+      sendPauseStatus(true); // Pause durumunu servera gönder
+    } else {
+      interval = setInterval(updateGameTime, 1000);  // Zamanı başlat
+      toggleIcon.classList.remove("fa-play");
+      toggleIcon.classList.add("fa-pause"); // Pause ikonuna geç
+      sendPauseStatus(false); // Play durumunu servera gönder
     }
   }
+
+  // Pause durumunu sunucudan al ve zamanı başlat/durdur
+  function fetchPauseStatus() {
+    fetch('/get_pause_status')
+      .then(response => response.json())
+      .then(data => {
+        const isPaused = data.is_paused;
+        const toggleIcon = document.getElementById("toggleIcon");
+        if (isPaused) {
+          clearInterval(interval);
+          interval = null;
+          toggleIcon.classList.remove("fa-pause");
+          toggleIcon.classList.add("fa-play");
+        } else {
+          interval = setInterval(updateGameTime, 1000);
+          toggleIcon.classList.remove("fa-play");
+          toggleIcon.classList.add("fa-pause");
+        }
+      })
+      .catch(error => console.error('Pause durumu alınamadı:', error));
+  }
+
+  // İkonun tıklama olayını ekle
+  document.getElementById("toggleIcon").addEventListener("click", toggleGameTime);
+
+  // Başlangıçta pause durumunu al ve zaman kontrolünü başlat
+  fetchPauseStatus();
 </script>
 
-  </body>
+
+
+
+</body>
+
 </html>

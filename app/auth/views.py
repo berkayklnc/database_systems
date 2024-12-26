@@ -3,6 +3,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from app.models.Player import PlayerModel,Player
 from app.models.User import UserModel,User
 from app.models.Game_mode import GameModeModel
+from app.models.GameTime import GameTimeModel
 def login_page():
     return render_template('auth/login.html')
 def handle_login():
@@ -13,6 +14,8 @@ def handle_login():
         return render_template('auth/login.html', error=f"Player with username '{user_name}' does not exist.")
     is_password_correct = check_password_hash(player.password, request.form['password'])
     if is_password_correct:
+        game_time = GameTimeModel().get_gametime(player.id)
+        session['game_time'] = game_time.strftime('%Y-%m-%d %H:%M')
         session['user_name'] = user_name
         session['player_id'] = player.id
         return redirect(url_for('home_page'))

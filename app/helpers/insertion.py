@@ -84,7 +84,16 @@ def insertData():
         cursor.execute("INSERT INTO players_plane (is_available,plane_id,player_id) VALUES (TRUE,4,1);")
         mysql.connection.commit()
         cursor.close()
-    
+    #Inserting game_time for player
+    cursor=mysql.connection.cursor()
+    cursor.execute("SELECT * FROM game_times")
+    is_empty=cursor.fetchall()
+    cursor.close()
+    if not is_empty:
+        cursor=mysql.connection.cursor()
+        cursor.execute("INSERT INTO game_times (player_id, game_mode_id, game_time, game_name) VALUES(%s, %s, %s, %s)",(1, 1, '2024-01-01 00:00:00', 'Test Oyun'))
+        mysql.connection.commit()
+        cursor.close()
     #Inserting Flights
     cursor=mysql.connection.cursor()
     cursor.execute("SELECT * FROM flights")

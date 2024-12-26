@@ -10,6 +10,7 @@ from wtforms import StringField, IntegerField, FloatField, DateTimeField
 from app.models.Plane import PlaneModel
 from app.models.Player import PlayerModel
 from app.models.User import UserModel
+from app.models.GameTime import GameTimeModel
 import json
 main = Blueprint('main', __name__)
 @main.before_app_request
@@ -94,7 +95,20 @@ def profile_page():
     player=PlayerModel().get_player_by_user_name(user_name)
     user = UserModel().get_user_by_id(player.user_id)
     return render_template('profile.html',player=player,user=user)
+def update_time():
+    updated_time = GameTimeModel().update_gametime(session.get('player_id'))
+    session['game_time'] = updated_time.strftime('%Y-%m-%d %H:%M')
+    return 'success'
 
+def get_pause_status():
+    is_paused = session.get('is_paused', False)  # Varsayılan olarak False
+    return jsonify({'is_paused': is_paused})
+
+def toggle_pause():
+    current_status = session.get('is_paused', False)
+    new_status = not current_status
+    session['is_paused'] = new_status
+    return jsonify({'is_paused': new_status})
 
 def load_states():
     with open('app/helpers/states.json', 'r') as file:
