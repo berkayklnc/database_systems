@@ -18,6 +18,7 @@ def handle_login():
         session['game_time'] = game_time.strftime('%Y-%m-%d %H:%M')
         session['user_name'] = user_name
         session['player_id'] = player.id
+        session['player_balance']=player.balance
         return redirect(url_for('home_page'))
     else:
         return render_template('auth/login.html', error="Invalid password")

@@ -27,6 +27,7 @@ def create_app():
     app.add_url_rule('/update_time',view_func=views.update_time,methods=['POST'])
     app.add_url_rule('/get_pause_status', 'get_pause_status', view_func=views.get_pause_status, methods=['GET'])
     app.add_url_rule('/toggle_pause', 'toggle_pause', view_func=views.toggle_pause, methods=['POST'])
+    app.add_url_rule('/myplanes',view_func=views.myplanes_page)
 
     mysql = MySQL(app)
     app.config["mysql"] = mysql

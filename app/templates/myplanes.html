@@ -1,0 +1,230 @@
+{% extends "layout.html" %}
+{% block title %}MyPlanes{% endblock %}
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="grid grid-cols-1 gap-6">
+        {% for plane in planes %}
+        <div class="relative bg-white shadow-md rounded-lg flex flex-row items-center">
+            <img
+                class="w-32 h-32 object-cover rounded-full ml-4"
+                src="{{ url_for('static', filename='img/thy.png') }}"
+                alt="Boeing 737 Görseli"
+            />
+            <div class="flex-1 p-4">
+                <h2 class="text-xl font-semibold text-gray-800">{{plane.name}}</h2>
+                <p class="text-gray-600 text-sm">Yolcu Kapasitesi: {{plane.chair_number}}</p>
+                <p class="text-gray-600 text-sm">Durumu: Aktif</p>
+                <p style="margin-bottom: 10px;" class="text-purple-700 font-bold text-lg">Fiyat: ${{(plane.price)/10}}</p>
+            </div>
+            <!-- Circular Button -->
+            <button
+                id="open-modal"
+                class="absolute bottom-4 right-4 w-12 h-12 rounded-full bg-purple-600 text-white flex items-center justify-center shadow-md hover:bg-purple-700 transition"
+                onclick="openModal()"
+                title="Add to cart"
+            >
+                <span class="relative top-[-2px] leading-none text-3xl font-extrabold">+</span>
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+        <!-- Modal Background -->
+    <div id="modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 hidden flex justify-center items-center">
+
+        <!-- Modal Content -->
+        <div class="bg-white p-6 rounded-lg shadow-lg w-96">
+            <h2 class="text-2xl font-semibold mb-4 text-center">Flight Information</h2>
+            
+            <!-- Form inside the Modal -->
+            <form action="your_backend_script.php" method="POST" class="grid grid-cols-2 gap-4">
+
+                <!-- Origin City -->
+                <div class="col-span-2">
+                    <label for="origin_city" class="block text-sm font-medium text-gray-700">Origin City</label>
+                    <div class="relative dropdown-wrapper">
+                        <input type="text" id="origin_search" placeholder="Search Origin City..." 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        <ul id="origin_city_dropdown" class="absolute w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg dropdown-list hidden"></ul>
+                    </div>
+                </div>
+
+                <!-- Origin Code -->
+                <div class="col-span-2">
+                    <label for="origin_code" class="block text-sm font-medium text-gray-700">Origin Code</label>
+                    <div class="relative dropdown-wrapper">
+                        <input type="text" id="origin_code_search" placeholder="Search Origin Code..." 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        <ul id="origin_code_dropdown" class="absolute w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg dropdown-list hidden"></ul>
+                    </div>
+                </div>
+
+                <!-- Destination City -->
+                <div class="col-span-2">
+                    <label for="dest_city" class="block text-sm font-medium text-gray-700">Destination City</label>
+                    <div class="relative dropdown-wrapper">
+                        <input type="text" id="dest_search" placeholder="Search Destination City..." 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        <ul id="dest_city_dropdown" class="absolute w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg dropdown-list hidden"></ul>
+                    </div>
+                </div>
+
+                <!-- Destination Code -->
+                <div class="col-span-2">
+                    <label for="dest_code" class="block text-sm font-medium text-gray-700">Destination Code</label>
+                    <div class="relative dropdown-wrapper">
+                        <input type="text" id="dest_code_search" placeholder="Search Destination Code..." 
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                        <ul id="dest_code_dropdown" class="absolute w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg dropdown-list hidden"></ul>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="col-span-2 flex justify-end space-x-4">
+                    <button type="button" id="close-modal" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Close</button>
+                    <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        const modal = document.getElementById('modal');
+        const openModalButton = document.getElementById('open-modal');
+        const closeModalButton = document.getElementById('close-modal');
+
+        const originSearch = document.getElementById('origin_search');
+        const originCityDropdown = document.getElementById('origin_city_dropdown');
+        const originCodeSearch = document.getElementById('origin_code_search');
+        const originCodeDropdown = document.getElementById('origin_code_dropdown');
+        const destSearch = document.getElementById('dest_search');
+        const destCityDropdown = document.getElementById('dest_city_dropdown');
+        const destCodeSearch = document.getElementById('dest_code_search');
+        const destCodeDropdown = document.getElementById('dest_code_dropdown');
+
+        let jsonData = {};
+
+        // Fetch JSON data
+        fetch('/static/json/states_airports.json')
+            .then(response => response.json())
+            .then(data => {
+                jsonData = data;
+            });
+
+        // Populate Dropdown Helper
+        function populateDropdown(searchInput, dropdown, data, callback) {
+            dropdown.innerHTML = "";
+            const searchText = searchInput.value.toLowerCase();
+            const matchedItems = Object.keys(data).filter(state => state.toLowerCase().includes(searchText)).slice(0, 5);
+
+            matchedItems.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                li.className = "px-4 py-2 hover:bg-gray-200 cursor-pointer";
+                li.addEventListener('click', () => {
+                    searchInput.value = item;
+                    dropdown.classList.add('hidden');
+                    callback(item); // Update dependent dropdown
+                });
+                dropdown.appendChild(li);
+            });
+
+            dropdown.classList.toggle('hidden', matchedItems.length === 0);
+        }
+
+        // Populate Codes Helper
+        function populateCodeDropdown(searchInput, dropdown, codes) {
+            dropdown.innerHTML = "";
+            const searchText = searchInput.value.toLowerCase();
+            const matchedItems = codes.filter(code => code.toLowerCase().includes(searchText));
+
+            matchedItems.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                li.className = "px-4 py-2 hover:bg-gray-200 cursor-pointer";
+                li.addEventListener('click', () => {
+                    searchInput.value = item;
+                    dropdown.classList.add('hidden');
+                });
+                dropdown.appendChild(li);
+            });
+
+            dropdown.classList.toggle('hidden', matchedItems.length === 0);
+        }
+
+        // Event Listeners for Focus and Input
+        originSearch.addEventListener('focus', () => {
+            originCityDropdown.classList.remove('hidden');
+            populateDropdown(originSearch, originCityDropdown, jsonData, (state) => {
+                populateCodeDropdown(originCodeSearch, originCodeDropdown, jsonData[state]);
+            });
+        });
+
+        originSearch.addEventListener('input', () => {
+            originCityDropdown.classList.remove('hidden');
+            populateDropdown(originSearch, originCityDropdown, jsonData, (state) => {
+                populateCodeDropdown(originCodeSearch, originCodeDropdown, jsonData[state]);
+            });
+        });
+
+        originCodeSearch.addEventListener('focus', () => {
+            const state = originSearch.value;
+            if (state && jsonData[state]) {
+                populateCodeDropdown(originCodeSearch, originCodeDropdown, jsonData[state]);
+            }
+        });
+
+        originCodeSearch.addEventListener('input', () => {
+            const state = originSearch.value;
+            if (state && jsonData[state]) {
+                populateCodeDropdown(originCodeSearch, originCodeDropdown, jsonData[state]);
+            }
+        });
+
+        destSearch.addEventListener('focus', () => {
+            destCityDropdown.classList.remove('hidden');
+            populateDropdown(destSearch, destCityDropdown, jsonData, (state) => {
+                populateCodeDropdown(destCodeSearch, destCodeDropdown, jsonData[state]);
+            });
+        });
+
+        destSearch.addEventListener('input', () => {
+            destCityDropdown.classList.remove('hidden');
+            populateDropdown(destSearch, destCityDropdown, jsonData, (state) => {
+                populateCodeDropdown(destCodeSearch, destCodeDropdown, jsonData[state]);
+            });
+        });
+
+        destCodeSearch.addEventListener('focus', () => {
+            const state = destSearch.value;
+            if (state && jsonData[state]) {
+                populateCodeDropdown(destCodeSearch, destCodeDropdown, jsonData[state]);
+            }
+        });
+
+        destCodeSearch.addEventListener('input', () => {
+            const state = destSearch.value;
+            if (state && jsonData[state]) {
+                populateCodeDropdown(destCodeSearch, destCodeDropdown, jsonData[state]);
+            }
+        });
+
+        // Open and Close Modal
+        function openModal(planeId) {
+        const modal = document.getElementById('modal');
+        modal.classList.remove('hidden'); // Show the modal
+        modal.classList.add('flex');
+
+        }
+        openModalButton.addEventListener('click', () => modal.classList.remove('hidden'));
+        closeModalButton.addEventListener('click', () => modal.classList.add('hidden'));
+
+        // Close Dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const dropdowns = [originCityDropdown, originCodeDropdown, destCityDropdown, destCodeDropdown];
+            const inputs = [originSearch, originCodeSearch, destSearch, destCodeSearch];
+            if (!inputs.some(input => input.contains(e.target)) && !dropdowns.some(dropdown => dropdown.contains(e.target))) {
+                dropdowns.forEach(dropdown => dropdown.classList.add('hidden'));
+            }
+        });
+    </script>
+</div>
+{% endblock %}

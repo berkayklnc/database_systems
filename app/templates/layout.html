@@ -34,10 +34,14 @@
                 class="rounded-md px-3 py-2 text-sm font-medium {% if request.path == '/planes' %} bg-gray-900 text-white {% else %} text-gray-300 hover:bg-gray-700 hover:text-white {% endif %}">Uçaklar</a>
               <a href="/flights"
                 class="rounded-md px-3 py-2 text-sm font-medium {% if request.path == '/flights' %} bg-gray-900 text-white {% else %} text-gray-300 hover:bg-gray-700 hover:text-white {% endif %}">Uçuşlar</a>
-            </div>
+                <a href="/myplanes"
+                class="rounded-md px-3 py-2 text-sm font-medium {% if request.path == '/myplanes' %} bg-gray-900 text-white {% else %} text-gray-300 hover:bg-gray-700 hover:text-white {% endif %}">Uçaklarım</a>
+              </div>
           </div>
         </div>
         <div class="flex items-center space-x-4">
+          <p id="balance" class="text-white"></p>
+          <p id="seperator" class="text-white">|</p>
           <p id="game_time" class="text-white"></p>
           <i id="toggleIcon" class="fas fa-pause text-white" style="cursor: pointer;"></i>
 
@@ -191,6 +195,8 @@
 
   // Başlangıçta pause durumunu al ve zaman kontrolünü başlat
   fetchPauseStatus();
+  let mybalance = '{{ session.get('player_balance') }}'
+  document.getElementById('balance').innerText="Balance: "+mybalance+"$"
 </script>
 
 

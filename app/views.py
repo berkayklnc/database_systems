@@ -8,6 +8,7 @@ from wtforms.validators import DataRequired, Length, NumberRange, ValidationErro
 from wtforms import StringField, IntegerField, FloatField, DateTimeField
 
 from app.models.Plane import PlaneModel
+from app.models.PlayerPlane import PlayerPlaneModel
 from app.models.Player import PlayerModel
 from app.models.User import UserModel
 from app.models.GameTime import GameTimeModel
@@ -85,6 +86,7 @@ def buy_plane(plane_id):
     errors={}
     if balance>=plane.price:
         PlayerModel().update_balance(player_id=player_id,add=False,amount=plane.price)
+        update_balance_text()
         PlayerModel().add_plane_to_player(plane.id,player_id)
     else: 
         errors={'balance': ['Is not enough']}
@@ -125,3 +127,10 @@ class FlightForm(FlaskForm):
     origin_city = StringField('origin City', validators=[DataRequired(), Length(min=2, max=20)])
     dest_city = StringField('dest City', validators=[DataRequired(), Length(min=2, max=20)])
     flight_time = DateTimeField('flight Time', format='%Y-%m-%d')
+
+def myplanes_page():
+    allmyplanes=PlayerPlaneModel().get_planes_by_user_id(session.get("player_id"))
+    return render_template('myplanes.html',planes=allmyplanes)
+def update_balance_text():
+    player=PlayerModel().get_player_by_user_name(session["user_name"])
+    session["player_balance"]=player.balance
