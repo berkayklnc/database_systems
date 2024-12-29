@@ -11,16 +11,17 @@
                 alt="Boeing 737 Görseli"
             />
             <div class="flex-1 p-4">
-                <h2 class="text-xl font-semibold text-gray-800">{{plane.name}}</h2>
-                <p class="text-gray-600 text-sm">Yolcu Kapasitesi: {{plane.chair_number}}</p>
+                <h2 class="text-xl font-semibold text-gray-800">{{planes[plane].name}}</h2>
+                <p class="text-gray-600 text-sm">Yolcu Kapasitesi: {{planes[plane].chair_number}}</p>
+                <p class="text-gray-600 text-sm">Plane id: {{plane}}</p>
                 <p class="text-gray-600 text-sm">Durumu: Aktif</p>
-                <p style="margin-bottom: 10px;" class="text-purple-700 font-bold text-lg">Fiyat: ${{(plane.price)/10}}</p>
+                <p style="margin-bottom: 10px;" class="text-purple-700 font-bold text-lg">Fiyat: ${{(planes[plane].price)/200}}</p>
             </div>
             <!-- Circular Button -->
             <button
                 id="open-modal"
                 class="absolute bottom-4 right-4 w-12 h-12 rounded-full bg-purple-600 text-white flex items-center justify-center shadow-md hover:bg-purple-700 transition"
-                onclick="openModal()"
+                onclick="openModal('{{ plane }}')"
                 title="Add to cart"
             >
                 <span class="relative top-[-2px] leading-none text-3xl font-extrabold">+</span>
@@ -36,13 +37,13 @@
             <h2 class="text-2xl font-semibold mb-4 text-center">Flight Information</h2>
             
             <!-- Form inside the Modal -->
-            <form action="your_backend_script.php" method="POST" class="grid grid-cols-2 gap-4">
-
+            <form action="{{url_for('add_flight')}}" method="POST" class="grid grid-cols-2 gap-4">
+                <input type="hidden" id="plane-id-input" name="plane_id" value="">
                 <!-- Origin City -->
                 <div class="col-span-2">
                     <label for="origin_city" class="block text-sm font-medium text-gray-700">Origin City</label>
                     <div class="relative dropdown-wrapper">
-                        <input type="text" id="origin_search" placeholder="Search Origin City..." 
+                        <input type="text" id="origin_search" name="origin_search" placeholder="Search Origin City..." 
                             class=" w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                         <ul id="origin_city_dropdown" class="z-10 absolute w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg dropdown-list hidden"></ul>
                     </div>
@@ -52,7 +53,7 @@
                 <div class="col-span-2">
                     <label for="origin_code" class="block text-sm font-medium text-gray-700">Origin Code</label>
                     <div class="relative dropdown-wrapper">
-                        <input type="text" id="origin_code_search" placeholder="Search Origin Code..." 
+                        <input type="text" id="origin_code_search" name="origin_code_search" placeholder="Search Origin Code..." 
                             class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                         <ul id="origin_code_dropdown" class="z-10 absolute w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg dropdown-list hidden"></ul>
                     </div>
@@ -62,7 +63,7 @@
                 <div class="col-span-2">
                     <label for="dest_city" class="block text-sm font-medium text-gray-700">Destination City</label>
                     <div class="relative dropdown-wrapper">
-                        <input type="text" id="dest_search" placeholder="Search Destination City..." 
+                        <input type="text" id="dest_search" name="dest_search" placeholder="Search Destination City..." 
                             class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                         <ul id="dest_city_dropdown" class="z-10 absolute w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg dropdown-list hidden"></ul>
                     </div>
@@ -72,12 +73,51 @@
                 <div class="col-span-2">
                     <label for="dest_code" class="block text-sm font-medium text-gray-700">Destination Code</label>
                     <div class="relative dropdown-wrapper">
-                        <input type="text" id="dest_code_search" placeholder="Search Destination Code..." 
+                        <input type="text" id="dest_code_search" name="dest_code_search" placeholder="Search Destination Code..." 
                             class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                         <ul id="dest_code_dropdown" class="z-10 absolute w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg dropdown-list hidden"></ul>
                     </div>
                 </div>
-
+                <div>
+                    <label for="departure-date" class="block text-sm font-medium text-gray-700">Departure Date</label>
+                    <input type="date" id="departure-date" name="departure-date"
+                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50">
+                </div>
+                <div class="col-span-2">
+                    <label for="time" class="block text-sm font-medium text-gray-700">Departure Time</label>
+                    <input
+                        type="time"
+                        id="departure-time"
+                        name="departure-time"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                    />
+                </div>
+                <div class="col-span-2">
+                    <label for="price" class="block text-sm font-medium text-gray-700">Economy Ticket</label>
+                    <div class="relative mt-1">
+                        <input
+                            type="number"
+                            id="economy-price"
+                            name="economy-price"
+                            placeholder="Enter price..."
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                        />
+                        <span class="absolute inset-y-0 right-3 flex items-center text-gray-500">$</span>
+                    </div>
+                </div>
+                <div class="col-span-2">
+                    <label for="price" class="block text-sm font-medium text-gray-700">Business Ticket</label>
+                    <div class="relative mt-1">
+                        <input
+                            type="number"
+                            id="business-price"
+                            name="business-price"
+                            placeholder="Enter price..."
+                            class="w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                        />
+                        <span class="absolute inset-y-0 right-3 flex items-center text-gray-500">$</span>
+                    </div>
+                </div>
                 <!-- Submit Button -->
                 <div class="col-span-2 flex justify-end space-x-4">
                     <button type="button" id="close-modal" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600">Close</button>
@@ -120,16 +160,15 @@
                 li.textContent = item;
                 li.className = "px-4 py-2 hover:bg-gray-200 cursor-pointer";
                 li.addEventListener('click', () => {
-                    searchInput.value = item;
+                    searchInput.value = item;  // Input value güncelleniyor
                     dropdown.classList.add('hidden');
-                    callback(item); // Update dependent dropdown
+                    callback(item);  // Callback fonksiyonunu çağırarak kodları çalıştırmaya devam et
                 });
                 dropdown.appendChild(li);
             });
 
             dropdown.classList.toggle('hidden', matchedItems.length === 0);
         }
-
         // Populate Codes Helper
         function populateCodeDropdown(searchInput, dropdown, codes) {
             dropdown.innerHTML = "";
@@ -209,7 +248,9 @@
 
         // Open and Close Modal
         function openModal(planeId) {
+        const planeIdInput = document.getElementById('plane-id-input');
         const modal = document.getElementById('modal');
+        planeIdInput.value = planeId;
         modal.classList.remove('hidden'); // Show the modal
         modal.classList.add('flex');
 

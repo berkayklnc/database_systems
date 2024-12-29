@@ -37,7 +37,7 @@ def insertData():
     cursor.close()
     if not is_empty:
         cursor=mysql.connection.cursor()
-        cursor.execute("INSERT INTO game_modes (id, chance, coin_multiplier, first_balance) VALUES('EASY', 0.90, 2.0, 100000),('MEDIUM', 0.75, 1.5, 75000),('HARD', 0.50, 1.0, 50000);")
+        cursor.execute("INSERT INTO game_modes (id, chance, coin_multiplier, first_balance) VALUES('EASY', 0.95, 100.0, 100000),('MEDIUM', 0.85, 80.0, 75000),('HARD', 0.75, 70.0, 50000);")
         mysql.connection.commit()
         cursor.close()
     

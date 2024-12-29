@@ -16,11 +16,19 @@ class PlayerPlaneModel:
         playersplanes=cursor.fetchall()
         cursor.close()
         playersplanes = [PlayerPlane(single[0], single[1], single[2],single[3]) for single in playersplanes]
-        allmyplanes=[]
+        allmyplanes={}
         for i in range(len(playersplanes)):
             plane=PlaneModel().get_plane_by_id(playersplanes[i].plane_id)
-            allmyplanes.append(plane)
+            allmyplanes[playersplanes[i].id]=(plane)
         return allmyplanes
+    def get_plane_id(self,player_plane_id):
+        player_plane_id=int(player_plane_id)
+        cursor=self.mysql.connection.cursor()
+        cursor.execute("SELECT * FROM players_plane WHERE id=%s",(player_plane_id,))
+        plane_id=cursor.fetchone()
+        plane_id=plane_id[2]
+        plane_id=int(plane_id)
+        return plane_id
 
 
     

@@ -60,3 +60,17 @@ class PlayerModel:
         balance=cursor.fetchone()
         cursor.close()
         return balance[0]
+    def get_base_and_chance(self,player_id):
+        cursor=self.mysql.connection.cursor()
+        cursor.execute("SELECT * FROM players WHERE id=%s",(player_id,))
+        player=cursor.fetchone()
+        cursor.close()
+        cursor=self.mysql.connection.cursor()
+        cursor.execute("SELECT * FROM game_modes WHERE id=%s",(player[5],))
+        game_mode=cursor.fetchone()
+        base=game_mode[2]
+        chance=game_mode[1]
+        print(base)
+        print(chance)
+        return base,chance
+        

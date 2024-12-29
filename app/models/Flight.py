@@ -76,14 +76,19 @@ class FlightModel:
         cursor.execute("SELECT ratio FROM priors WHERE route=%s",(route,))
         ratio=cursor.fetchone()
         cursor.close()
-        ratio=ratio[0]
+        if ratio!=None:
+            ratio=ratio[0]
+        else:
+            ratio=None
         passengers=0
         cursor=self.mysql.connection.cursor()
         cursor.execute("SELECT chair_number FROM planes WHERE id=(SELECT plane_id FROM players_plane WHERE id=(SELECT player_plane_id FROM flights WHERE id=%s))",(flight_id,))
         seats=cursor.fetchone()
         cursor.close()
         seats=seats[0]
-        if ratio==0:
+        if seats==None:
+            per_second=3
+        elif ratio==0 or ratio==None:
             per_second=2
         else:
             per_second=60/(base*ratio)  #MEDİUM BASE 80 EASY BASE 100 HARD BASE 60

@@ -1,7 +1,7 @@
 from flask import render_template, session, redirect, url_for, request, Blueprint,jsonify
 from wtforms.fields.simple import BooleanField
 
-from app.models.Flight import FlightModel
+from app.models.Flight import FlightModel,Flight
 from flask_wtf import FlaskForm
 from wtforms import StringField
 from wtforms.validators import DataRequired, Length, NumberRange, ValidationError
@@ -13,6 +13,7 @@ from app.models.Player import PlayerModel
 from app.models.User import UserModel
 from app.models.GameTime import GameTimeModel
 import json
+import random
 main = Blueprint('main', __name__)
 @main.before_app_request
 def before_request():
@@ -20,9 +21,7 @@ def before_request():
         return redirect(url_for('login'))   
 def home_page():
     user_name = session.get('user_name')
-    return render_template('home.html',user_name=user_name)
-def add_flight():
-    return render_template('flight_modal.html')    
+    return render_template('home.html',user_name=user_name)   
 def flight_page():
     form = FlightForm()
     states = load_states()
@@ -134,3 +133,44 @@ def myplanes_page():
 def update_balance_text():
     player=PlayerModel().get_player_by_user_name(session["user_name"])
     session["player_balance"]=player.balance
+def create_new_flight():
+    player_id=session.get('player_id')
+    player_id=int(player_id)
+    origin_city=request.form.get("origin_search")
+    origin_code=request.form.get("origin_code_search")
+    dest_city=request.form.get("dest_search")
+    dest_code=request.form.get("dest_code_search")
+    departure_date=request.form.get("departure-date")
+    departure_time=request.form.get("departure-time")
+    economy_price=request.form.get("economy-price")
+    business_price=request.form.get("business-price")
+    player_plane_id=request.form.get("plane_id")
+    if origin_city==None or origin_code==None or dest_city==None or dest_code==None or departure_date==None or departure_time==None or economy_price==None or business_price==None:
+        return myplanes_page()
+    plane_id=PlayerPlaneModel().get_plane_id(player_plane_id=player_plane_id)
+    price=PlaneModel().get_plane_price(plane_id=plane_id)
+    print(type(price))
+    price=price/200
+    PlayerModel().update_balance(player_id=player_id,add=False,amount=price)
+    update_balance_text()
+    flight_time=departure_date+' '+departure_time+':00'
+    travel_time=random.randint(100, 300)
+    my_flight=Flight(
+        origin_city=origin_city,
+        dest_city=dest_city,
+        origin_code=origin_code,
+        dest_code=dest_code,
+        flight_time=flight_time,
+        travel_time=travel_time,
+        player_plane_id=player_plane_id,
+        passengers=0,
+        economy_ticket_price=economy_price,
+        business_ticket_price=business_price
+    )
+    flight_id=FlightModel().add_flight(my_flight)
+    base,chance=PlayerModel().get_base_and_chance(player_id=player_id)
+    print(base)
+    print(chance)
+    FlightModel().fill_flight(origin_code=origin_code,dest_code=dest_code,base=base,chance=chance,flight_id=flight_id,player_id=player_id)
+    update_balance_text()
+    return myplanes_page()

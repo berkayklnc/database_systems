@@ -44,3 +44,10 @@ class PlaneModel:
             cursor.execute("UPDATE planes SET price=%s,chair_number=%s WHERE id=%s",(new_price,new_chair_number,plane_id))
         self.mysql.connection.commit()
         cursor.close()
+    def get_plane_price(self,plane_id):
+        cursor=self.mysql.connection.cursor()
+        cursor.execute("SELECT * FROM planes WHERE id=%s",(plane_id,))
+        plane=cursor.fetchone()
+        price=plane[3]
+        price=float(price)
+        return price
