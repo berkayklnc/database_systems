@@ -104,7 +104,9 @@ def profile_page():
     return render_template('profile.html',player=player,user=user)
 def update_time():
     updated_time = GameTimeModel().update_gametime(session.get('player_id'))
-    session['game_time'] = updated_time.strftime('%Y-%m-%d %H:%M')
+    time=updated_time.strftime('%Y-%m-%d %H:%M')
+    session['game_time'] = time
+    FlightModel().delete_flight_by_time(time=time)
     return 'success'
 
 def get_pause_status():
@@ -181,20 +183,19 @@ def create_new_flight():
     update_balance_text()
     return myplanes_page()
 def buy_ticket():
-    try:
-        player_id = session.get('player_id')
-        data = request.get_json()
-        flight_id1 = data.get('flight_id1')
-        flight_id2 = data.get('flight_id2')
-        ticket_1 = float(data.get('ticket_1'))
-        ticket_2 = float(data.get('ticket_2') or 0)
-        print(f'Button clicked for flights with ID:{flight_id1}and {flight_id2} and total')
-        FlightModel().get_ticket(player_id,flight_id1,ticket_1,ticket_2,flight_id2)
-        return jsonify({'status': 'success', 'message': 'Transfer flight info processed'}), 200
 
-    except Exception as e:
-    # Hata durumunda cevap dönüyoruz
-      return jsonify({'status': 'error', 'message': str(e)}), 500
+    player_id = session.get('player_id')
+    data = request.get_json()
+    flight_id1 = data.get('flight_id1')
+    flight_id2 = data.get('flight_id2')
+    ticket_1 = float(data.get('ticket_1'))
+    ticket_2 = float(data.get('ticket_2') or 0)
+    print(f'Button clicked for flights with ID:{flight_id1}and {flight_id2} and total')
+    FlightModel().get_ticket(player_id,flight_id1,ticket_1,ticket_2,flight_id2)
+    return jsonify({'status': 'success', 'message': 'Transfer flight info processed'}), 200
+
+
+    return jsonify({'status': 'error', 'message': str(e)}), 500
 def update_profile():
     name = request.form['name']
     surname = request.form['surname']
