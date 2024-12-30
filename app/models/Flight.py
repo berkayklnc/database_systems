@@ -144,7 +144,7 @@ class FlightModel:
             per_second=2
         else:
             per_second=60/(base*ratio)  #MEDİUM BASE 80 EASY BASE 100 HARD BASE 60
-        duration = 107
+        duration = 10.7
         start_time = time.time()
         while time.time() - start_time < duration:
             if passengers<=seats:
@@ -154,7 +154,7 @@ class FlightModel:
                     self.mysql.connection.commit()
                     cursor.close()
                     passengers=passengers+1
-                time.sleep(per_second)  
+                time.sleep(per_second/13.87)  
         economy_pass=int(float(passengers)*0.7)
         business_pass=passengers-economy_pass
         cursor=self.mysql.connection.cursor()
