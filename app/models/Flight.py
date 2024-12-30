@@ -170,6 +170,8 @@ class FlightModel:
         cursor.execute("UPDATE players SET balance=balance+%s WHERE id=%s",(gain,player_id))
         cursor.close()
     def get_ticket(self,buyer_id, flightid_1,ticket_1,ticket_2,flightid_2=None):
+        print(flightid_1)
+        print(flightid_2)
         cursor=self.mysql.connection.cursor()
         cursor.execute("""
         SELECT p.player_id 
@@ -187,9 +189,7 @@ class FlightModel:
         self.mysql.connection.commit()
         PlayerModel().update_balance(buyer_id,False,ticket_1)
         PlayerModel().update_balance(seller_id,True,ticket_1)
-        flightid_2 = flightid_2 or None
-        if flightid_2:
-            print(flightid_2)
+        if flightid_2!="null":
             cursor.execute("""
             SELECT p.player_id 
             FROM flights f
@@ -208,3 +208,16 @@ class FlightModel:
             PlayerModel().update_balance(seller_id,True,ticket_2) 
         cursor.close()
     
+
+
+
+
+
+
+
+
+    def delete_flight_by_time(self,time):
+        cursor=self.mysql.connection.cursor()
+        cursor.execute("DELETE FROM flights WHERE flight_time<%s AND  player_plane_id!=1",(time,))
+        self.mysql.connection.commit()
+        cursor.close()

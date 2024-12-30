@@ -51,3 +51,20 @@ class PlaneModel:
         price=plane[3]
         price=float(price)
         return price
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
