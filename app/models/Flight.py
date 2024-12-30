@@ -166,9 +166,7 @@ class FlightModel:
         gain_eco=economy*economy_pass
         gain_busi=business*business_pass
         gain=gain_eco+gain_busi
-        cursor=self.mysql.connection.cursor()
-        cursor.execute("UPDATE players SET balance=balance+%s WHERE id=%s",(gain,player_id))
-        cursor.close()
+        PlayerModel().update_balance(player_id=player_id,add=True,amount=gain)
     def get_ticket(self,buyer_id, flightid_1,ticket_1,ticket_2,flightid_2=None):
         print(flightid_1)
         print(flightid_2)
