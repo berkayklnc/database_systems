@@ -140,6 +140,7 @@ def update_balance_text():
     player=PlayerModel().get_player_by_user_name(session["user_name"])
     session["player_balance"]=player.balance
 def create_new_flight():
+    print(request.form.get("plane_id"))
     player_id=session.get('player_id')
     player_id=int(player_id)
     origin_city=request.form.get("origin_search")

@@ -187,7 +187,9 @@ class FlightModel:
         self.mysql.connection.commit()
         PlayerModel().update_balance(buyer_id,False,ticket_1)
         PlayerModel().update_balance(seller_id,True,ticket_1)
+        flightid_2 = flightid_2 or None
         if flightid_2:
+            print(flightid_2)
             cursor.execute("""
             SELECT p.player_id 
             FROM flights f
@@ -203,6 +205,6 @@ class FlightModel:
             """, (flightid_2,))
             self.mysql.connection.commit()
             PlayerModel().update_balance(buyer_id,False,ticket_2)
-            PlayerModel().update_balance(seller_id,True,ticket_2)
+            PlayerModel().update_balance(seller_id,True,ticket_2) 
         cursor.close()
     

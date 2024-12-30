@@ -10,6 +10,7 @@ class PlayerPlaneModel:
     def __init__(self):
         self.mysql = current_app.config['mysql']
     def get_planes_by_user_id(self,player_id):
+        print(player_id)
         player_id=int(player_id)
         cursor=self.mysql.connection.cursor()
         cursor.execute("SELECT * FROM players_plane WHERE player_id=%s",(player_id,))
