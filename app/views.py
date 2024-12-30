@@ -201,3 +201,8 @@ def update_profile():
     username = session.get('user_name')
     UserModel().update_user(name,surname,username)
     return profile_page()
+
+def delete_plane(plane_id):
+    player_id = session.get('player_id')
+    PlayerPlaneModel().delete_player_plane(player_id,plane_id)
+    return redirect(url_for('myplanes'))
