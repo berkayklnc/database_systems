@@ -20,8 +20,7 @@ def before_request():
     if 'user_name' not in session and request.endpoint not in ['login_page','login','register_page','register','static']:
         return redirect(url_for('login'))   
 def home_page():
-    user_name = session.get('user_name')
-    return render_template('home.html',user_name=user_name)   
+    return redirect(url_for('flight_page'))
 def flight_page():
     form = FlightForm()
     states = load_states()
