@@ -205,7 +205,7 @@ class FlightModel:
             """, (flightid_2,))
             self.mysql.connection.commit()
             PlayerModel().update_balance(buyer_id,False,ticket_2)
-            PlayerModel().update_balance(seller_id,True,ticket_2)
+            PlayerModel().update_balance(seller_id,True,ticket_2) 
         cursor.close()
     
 

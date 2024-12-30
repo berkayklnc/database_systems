@@ -17,17 +17,33 @@
                 <p class="text-gray-600 text-sm">Durumu: Aktif</p>
                 <p style="margin-bottom: 10px;" class="text-purple-700 font-bold text-lg">Fiyat: ${{(planes[plane].price)/200}}</p>
             </div>
-            <!-- Circular Button -->
+            
+            <!-- Circular Button to open modal -->
             <button
                 id="open-modal"
-                class="absolute bottom-4 right-4 w-12 h-12 rounded-full bg-purple-600 text-white flex items-center justify-center shadow-md hover:bg-purple-700 transition"
+                class="absolute bottom-4 right-20 w-12 h-12 rounded-full bg-purple-600 text-white flex items-center justify-center shadow-md hover:bg-purple-700 transition"
                 onclick="openModal('{{ plane }}')"
                 title="Add to cart"
             >
                 <span class="relative top-[-2px] leading-none text-3xl font-extrabold">+</span>
             </button>
+            <form action="{{ url_for('delete_plane', plane_id=plane) }}" method="POST">
+                <button
+                    type="submit"
+                    class="w-12 h-12 rounded-full bg-red-600 text-white flex items-center right-20 bottom-4 justify-center shadow-md hover:bg-red-700 transition"
+                    title="Delete"
+                    style="position: absolute;
+                    bottom: 16px;
+                    right: 13px;"
+                >
+                    <span class="relative top-[-2px] leading-none text-3xl font-extrabold">-</span>
+                </button>
+            </form>
+            <!-- Delete Button -->
+
         </div>
         {% endfor %}
+        
     </div>
         <!-- Modal Background -->
     <div id="modal" class="fixed inset-0 bg-gray-800 bg-opacity-50 hidden flex justify-center items-center">

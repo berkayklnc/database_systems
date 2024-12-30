@@ -10,6 +10,7 @@ class PlayerPlaneModel:
     def __init__(self):
         self.mysql = current_app.config['mysql']
     def get_planes_by_user_id(self,player_id):
+        print(player_id)
         player_id=int(player_id)
         cursor=self.mysql.connection.cursor()
         cursor.execute("SELECT * FROM players_plane WHERE player_id=%s",(player_id,))
@@ -29,6 +30,11 @@ class PlayerPlaneModel:
         plane_id=plane_id[2]
         plane_id=int(plane_id)
         return plane_id
+    def delete_player_plane(self,player_id,plane_id):
+        cursor=self.mysql.connection.cursor()
+        cursor.execute("DELETE FROM players_plane WHERE player_id=%s AND id=%s",(player_id,plane_id,))
+        self.mysql.connection.commit()
+        cursor.close()
 
 
     
