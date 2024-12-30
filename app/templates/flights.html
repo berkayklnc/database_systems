@@ -161,7 +161,8 @@
         <div class="text-gray-700 mt-2">Uçuş Süresi: {{flight.travel_time}} dk</div>
         <div class="flex flex-col items-center mt-4 space-y-2">
             <div class="text-sm text-gray-600">Uçuş vakti: {{flight.flight_time}}</div>
-          <div class="text-sm text-gray-600">Passenger: {{flight.passengers}}/100</div>
+            <div class="text-sm text-gray-600">Uçak İsmi: {{flight.plane_name}}</div>
+          <div class="text-sm text-gray-600">Passenger: {{flight.passengers}}/{{flight.chair_number}}</div>
           <div class="text-sm text-gray-600">Economy Class: {{flight.economy_ticket_price}} | Business Class: ${{flight.business_ticket_price}}</div>
         </div>
 
@@ -187,7 +188,8 @@
           <div class="text-gray-700 mt-2">Uçuş Süresi: {{flight.first_travel_time}}</div>
           <div class="flex flex-col items-center mt-4 space-y-2">
             <div class="text-sm text-gray-600">Uçuş vakti: {{flight.first_flight_time}}</div>
-            <div class="text-sm text-gray-600">Doluluk: {{flight.f1_passenger}}/100</div>
+            <div class="text-sm text-gray-600">Uçak İsmi: {{flight.first_plane_name}}</div>
+            <div class="text-sm text-gray-600">Passenger: {{flight.f1_passenger}}/{{flight.first_plane_chair_number}}</div>
             <div class="text-sm text-gray-600">Economy Class: ${{flight.first_economy_ticket_price}} | Business Class: ${{flight.first_business_ticket_price}}</div>
           </div>
         </div>
@@ -201,7 +203,8 @@
           <div class="text-gray-700 mt-2">Uçuş Süresi: {{flight.second_travel_time}}</div>
           <div class="flex flex-col items-center mt-4 space-y-2">
             <div class="text-sm text-gray-600">Uçuş vakti: {{flight.second_flight_time}}</div>
-            <div class="text-sm text-gray-600">Passenger: {{flight.f2_passenger}}/100</div>
+            <div class="text-sm text-gray-600">Uçak İsmi: {{flight.second_plane_name}}</div>
+            <div class="text-sm text-gray-600">Passenger: {{flight.f2_passenger}}/{{flight.second_plane_chair_number}}</div>
             <div class="text-sm text-gray-600">Economy Class: ${{flight.second_economy_ticket_price}} | Business Class: ${{flight.second_business_ticket_price}} </div>
           </div>
         </div>

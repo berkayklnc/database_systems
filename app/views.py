@@ -54,7 +54,11 @@ def flight_page():
                 'first_business_ticket_price':tranfered[15],
                 'second_business_ticket_price':tranfered[16],
                 'first_travel_time': tranfered[17],
-                'second_travel_time':tranfered[18]
+                'second_travel_time':tranfered[18],
+                'first_plane_name': tranfered[19],
+                'first_plane_chair_number': tranfered[20],
+                'second_plane_name': tranfered[21],
+                'second_plane_chair_number': tranfered[22]
             }
             for tranfered in transfered_flights
         ]
@@ -71,6 +75,8 @@ def flight_page():
                 'passengers':flight[8],
                 'economy_ticket_price': flight[9],
                 'business_ticket_price': flight[10],
+                'plane_name': flight[11],
+                'chair_number': flight[12],
             }
             for flight in direct_flights
         ]

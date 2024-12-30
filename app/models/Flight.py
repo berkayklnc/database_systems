@@ -53,7 +53,20 @@ class FlightModel:
         return flight_id
     def get_direct_flights(self,origin,destination,flight_time):
         cursor=self.mysql.connection.cursor()
-        cursor.execute("SELECT * FROM flights WHERE dest_city=%s AND origin_city=%s AND flight_time>= %s ORDER BY economy_ticket_price LIMIT 20",(destination,origin,flight_time))
+        cursor.execute("""
+            SELECT 
+                f.*, 
+                plane.name AS plane_name,
+                plane.chair_number
+            FROM flights f
+            JOIN players_plane p ON f.player_plane_id = p.id
+            JOIN planes plane ON plane.id = p.plane_id
+            WHERE f.dest_city = %s 
+            AND f.origin_city = %s 
+            AND f.flight_time >= %s
+            ORDER BY f.economy_ticket_price
+            LIMIT 20
+        """, (destination, origin, flight_time))
         flights=cursor.fetchall()
         cursor.close()
         return flights
@@ -62,11 +75,49 @@ class FlightModel:
         cursor.execute("DELETE * FROM flights WHERE id=%s",(id))
         self.mysql.connection.commit()
         flight=cursor.fetchnone()
-        cursor.close()
+        cursor.close()            
         return flight
     def get_transfered_flights(self,origin,destination,flight_time):
         cursor=self.mysql.connection.cursor()
-        cursor.execute("SELECT f1.id,f2.id,f1.origin_city as origin_city,f1.dest_city as transfer,f2.dest_city as dest_city,f1.origin_code as origin_code,f2.dest_code as dest_code,f1.flight_time as first_time,f2.flight_time as second_time,f1.player_plane_id,f2.player_plane_id,f1.passengers,f2.passengers,f1.economy_ticket_price,f2.economy_ticket_price ,f1.business_ticket_price,f2.business_ticket_price,f1.travel_time,f2.travel_time FROM flights f1 INNER JOIN flights f2 ON f1.dest_city=f2.origin_city WHERE f1.origin_city=%s AND f2.dest_city=%s AND f1.flight_time>= %s AND f2.flight_time > (f1.flight_time + INTERVAL f1.travel_time MINUTE) ORDER BY (f1.economy_ticket_price + f2.economy_ticket_price) LIMIT 10",(origin,destination,flight_time))
+        cursor.execute("""
+        SELECT 
+            f1.id AS first_flight_id, 
+            f2.id AS second_flight_id, 
+            f1.origin_city AS origin_city, 
+            f1.dest_city AS transfer, 
+            f2.dest_city AS dest_city, 
+            f1.origin_code AS origin_code, 
+            f2.dest_code AS dest_code, 
+            f1.flight_time AS first_time, 
+            f2.flight_time AS second_time, 
+            f1.player_plane_id AS first_player_plane_id, 
+            f2.player_plane_id AS second_player_plane_id, 
+            f1.passengers AS first_passengers, 
+            f2.passengers AS second_passengers, 
+            f1.economy_ticket_price AS first_economy_ticket_price, 
+            f2.economy_ticket_price AS second_economy_ticket_price, 
+            f1.business_ticket_price AS first_business_ticket_price, 
+            f2.business_ticket_price AS second_business_ticket_price, 
+            f1.travel_time AS first_travel_time, 
+            f2.travel_time AS second_travel_time, 
+            plane1.name AS first_plane_name, 
+            plane1.chair_number AS first_plane_chair_number, 
+            plane2.name AS second_plane_name, 
+            plane2.chair_number AS second_plane_chair_number
+        FROM flights f1
+        JOIN players_plane p1 ON f1.player_plane_id = p1.id
+        JOIN planes plane1 ON plane1.id = p1.plane_id
+        INNER JOIN flights f2 ON f1.dest_city = f2.origin_city
+        JOIN players_plane p2 ON f2.player_plane_id = p2.id
+        JOIN planes plane2 ON plane2.id = p2.plane_id
+        WHERE f1.origin_city = %s 
+        AND f2.dest_city = %s 
+        AND f1.flight_time >= %s
+        AND f2.flight_time > (f1.flight_time + INTERVAL f1.travel_time MINUTE)
+        ORDER BY (f1.economy_ticket_price + f2.economy_ticket_price)
+        LIMIT 10
+    """, (origin, destination, flight_time))
+
         flights=cursor.fetchall()
         cursor.close()
         return flights
