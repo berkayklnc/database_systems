@@ -28,7 +28,8 @@ def create_app():
     app.add_url_rule('/toggle_pause', 'toggle_pause', view_func=views.toggle_pause, methods=['POST'])
     app.add_url_rule('/myplanes',view_func=views.myplanes_page)
     app.add_url_rule('/myplanes/addflight','add_flight',views.create_new_flight,methods=['POST'])
-
+    app.add_url_rule('/buy_ticket','buy_ticket',views.buy_ticket,methods=['POST'])
+    app.add_url_rule('/update_profile','update_profile',views.update_profile, methods=['GET', 'POST'])
     mysql = MySQL(app)
     app.config["mysql"] = mysql
     app.register_blueprint(main)

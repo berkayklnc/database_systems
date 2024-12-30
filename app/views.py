@@ -180,3 +180,24 @@ def create_new_flight():
     FlightModel().fill_flight(origin_code=origin_code,dest_code=dest_code,base=base,chance=chance,flight_id=flight_id,player_id=player_id)
     update_balance_text()
     return myplanes_page()
+def buy_ticket():
+    try:
+        player_id = session.get('player_id')
+        data = request.get_json()
+        flight_id1 = data.get('flight_id1')
+        flight_id2 = data.get('flight_id2')
+        ticket_1 = float(data.get('ticket_1'))
+        ticket_2 = float(data.get('ticket_2') or 0)
+        print(f'Button clicked for flights with ID:{flight_id1}and {flight_id2} and total')
+        FlightModel().get_ticket(player_id,flight_id1,ticket_1,ticket_2,flight_id2)
+        return jsonify({'status': 'success', 'message': 'Transfer flight info processed'}), 200
+
+    except Exception as e:
+    # Hata durumunda cevap dönüyoruz
+      return jsonify({'status': 'error', 'message': str(e)}), 500
+def update_profile():
+    name = request.form['name']
+    surname = request.form['surname']
+    username = session.get('user_name')
+    UserModel().update_user(name,surname,username)
+    return profile_page()

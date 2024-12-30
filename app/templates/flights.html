@@ -11,6 +11,7 @@
     border-radius: 34px;
     right: 0;
     width: 55px;
+    cursor:pointer;
     justify-content: center;
     align-items: center;
     margin-right: -28px;
@@ -167,7 +168,11 @@
         </div>
 
         <!-- Yönlendirme kutusu -->
-        <div class="iconDiv absolute right-0 top-1/2 transform -translate-y-1/2 bg-indigo-500 text-white p-4 rounded-full opacity-0 info transition-all duration-300">
+        <div class="iconDiv absolute right-0 top-1/2 transform -translate-y-1/2 bg-indigo-500 text-white p-4 rounded-full opacity-0 info transition-all duration-300"
+         data-id1="{{ flight.id }}"
+         data-is-direct="true" 
+         data-economy-ticket-price-1="{{flight.economy_ticket_price}}" 
+         data-business-ticket-price-1="{{flight.business_ticket_price}}">
           <!-- Uçak ikonu (sağa bakan) -->
           <i class="fa-solid fa-plane"></i>
         </div>
@@ -210,15 +215,41 @@
         </div>
 
         <!-- Yönlendirme kutusu -->
-        <div class="iconDiv absolute right-0 top-1/2 transform -translate-y-1/2 bg-indigo-500 text-white p-4 rounded-full opacity-0 info transition-all duration-300">
+        <div class="iconDiv absolute right-0 top-1/2 transform -translate-y-1/2 bg-indigo-500 text-white p-4 rounded-full opacity-0 info transition-all duration-300"
+         data-id1="{{ flight.id_1 }}" data-id2="{{ flight.id_2 }}"
+         data-is-direct="false" 
+         data-economy-ticket-price-1="{{flight.first_economy_ticket_price}}" 
+         data-business-ticket-price-1="{{flight.first_business_ticket_price}}"
+         data-economy-ticket-price-2="{{flight.second_economy_ticket_price}}" 
+         data-business-ticket-price-2="{{flight.second_business_ticket_price}}"
+         >
           <i class="fa-solid fa-plane"></i>
         </div>
       </div>
       {% endfor %}
-      {% endif %}
+      {% endif %}    
 
     </div>
-
+<!-- Modal -->
+<!-- Modal -->
+<div id="ticketModal" class="modal hidden fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
+    <div class="modal-content bg-white rounded-lg shadow-lg p-6 w-96">
+      <h2 class="text-xl font-semibold mb-4">Bilet Seçimi</h2>
+      <form id="ticketForm" action="{{ url_for('buy_ticket') }}" method="POST">
+        <div id="ticketSelection" class="mb-4">
+          <!-- Seçenekler buraya dinamik olarak eklenecek -->
+        </div>
+        <div class="text-center">
+          <button type="submit" class="bg-blue-600 text-white font-semibold py-2 px-4 rounded-md shadow hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+            Satın Al
+          </button>
+        </div>
+      </form>
+      <button id="closeModal" class="mt-4 text-sm text-gray-500">Kapat</button>
+    </div>
+  </div>
+  
+  
   </div>
 
 <script>
@@ -330,4 +361,134 @@
   });
 </script>
 
+<script>
+    // Modal'ı açma ve kapama işlemleri
+document.querySelectorAll('.iconDiv').forEach(button => {
+  button.addEventListener('click', function() {
+    const flightId1 = button.getAttribute('data-id1');
+    const flightId2 = button.getAttribute('data-id2');
+    const isDirect = button.getAttribute('data-is-direct'); // Direkt uçuş bilgisi
+    const economyPrice1 = button.getAttribute('data-economy-ticket-price-1');
+    const businessPrice1 = button.getAttribute('data-business-ticket-price-1');
+    const economyPrice2 = button.getAttribute('data-economy-ticket-price-2');
+    const businessPrice2 = button.getAttribute('data-business-ticket-price-2');
+
+    // Modal'ı açıyoruz
+    const modal = document.getElementById('ticketModal');
+    modal.classList.remove('hidden'); // Modal görünür
+
+    // Ticket seçim alanını temizle
+    const ticketSelection = document.getElementById('ticketSelection');
+    ticketSelection.innerHTML = '';
+
+    // Eğer uçuş direktse, sadece bir bilet seçeneği göster
+    if (isDirect === 'true') {
+      ticketSelection.innerHTML = `
+        <div class="mb-4">
+          <label for="ticket_1" class="block text-sm font-medium text-gray-700">Ticket Selection</label>
+          <select id="ticket_1" name="ticket_1" class="w-full p-2 border border-gray-300 rounded-md">
+            <option value="${economyPrice1}">Economy class - $${economyPrice1}</option>
+            <option value="${businessPrice1}">Business class - $${businessPrice1}</option>
+          </select>
+        </div>
+      `;
+    } else {
+      // Eğer uçuş aktarmalıysa, iki bilet seçeneği göster
+      ticketSelection.innerHTML = `
+        <div class="mb-4">
+          <label for="ticket_1" class="block text-sm font-medium text-gray-700">Economy Class (1. Segment)</label>
+          <select id="ticket_1" name="ticket_1" class="w-full p-2 border border-gray-300 rounded-md">
+            <option value="${economyPrice1}">Economy class - $${economyPrice1}</option>
+            <option value="${businessPrice1}">Business class - $${businessPrice1}</option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label for="ticket_2" class="block text-sm font-medium text-gray-700">Economy Class (2. Segment)</label>
+          <select id="ticket_2" name="ticket_2" class="w-full p-2 border border-gray-300 rounded-md">
+            <option value="${economyPrice2}">Economy class - $${economyPrice2}</option>
+            <option value="${businessPrice2}">Business class - $${businessPrice2}</option>
+          </select>
+        </div>
+      `;
+    }
+
+    // Formu dinamik olarak güncelle
+    const ticketForm = document.getElementById('ticketForm');
+    ticketForm.setAttribute('data-id1', flightId1);
+    ticketForm.setAttribute('data-id2', flightId2);
+    ticketForm.setAttribute('data-is-direct', isDirect);
+  });
+});
+
+// Modal'ı kapama
+document.getElementById('closeModal').addEventListener('click', function() {
+  const modal = document.getElementById('ticketModal');
+  modal.classList.add('hidden'); // Modalı gizle
+});
+
+// Formu gönderme işlemi
+document.getElementById('ticketForm').addEventListener('submit', function(e) {
+  e.preventDefault(); // Formun standart submit işlemi engelleniyor
+
+  const flightId1 = this.getAttribute('data-id1');
+  const flightId2 = this.getAttribute('data-id2');
+  const isDirect = this.getAttribute('data-is-direct');
+
+  // Seçilen ticket bilgilerini alıyoruz
+  const Ticket1 = document.getElementById('ticket_1') ? document.getElementById('ticket_1').value : null;
+  const Ticket2 = document.getElementById('ticket_2') ? document.getElementById('ticket_2').value : null;
+
+  // Sunucuya verileri gönderme
+  const requestData = {
+    flight_id1: flightId1,
+    flight_id2: flightId2,
+    is_direct: isDirect,
+  };
+
+  if (isDirect === 'true') {
+    requestData.ticket_1 = Ticket1;
+  } else {
+    requestData.ticket_1 = Ticket1;
+    requestData.ticket_2 = Ticket2;
+  }
+
+  fetch('/buy_ticket', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(requestData)
+  })
+  .then(response => response.json())
+  .then(data => {
+    // Başarı durumunda
+    if (data.status === 'success') {
+      Toastify({
+        text: "Bilet başarılı bir şekilde satın alındı!",
+        backgroundColor: "green",
+        duration: 3000
+      }).showToast();
+    } else {
+      Toastify({
+        text: `Hata: ${data.message}`,
+        backgroundColor: "red",
+        duration: 3000
+      }).showToast();
+    }
+
+    // Modalı kapat
+    const modal = document.getElementById('ticketModal');
+    modal.classList.add('hidden');
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+    Toastify({
+      text: "Beklenmedik bir hata oluştu.",
+      backgroundColor: "red",
+      duration: 3000
+    }).showToast();
+  });
+});
+
+</script>
 {% endblock %}

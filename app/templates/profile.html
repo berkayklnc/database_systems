@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Home{% endblock %}
+{% block title %}Profil Düzenle{% endblock %}
 {% block content %}
 <div class="max-w-4xl mx-auto mt-10 p-8 bg-white rounded-lg shadow-lg">
     <div class="text-center mb-8">
@@ -8,64 +8,34 @@
       </h1>
     </div>
 
-    <form action="#" method="POST" class="space-y-6">
+    <form action="{{ url_for('update_profile') }}" method="POST" class="space-y-6">
+      <!-- Method Override for PUT -->
+      <input type="hidden" name="_method" value="PUT">
+
       <!-- Name -->
       <div>
-        <label for="name" class="block text-sm font-medium text-gray-700"
-          >Ad</label
-        >
+        <label for="name" class="block text-sm font-medium text-gray-700">Ad</label>
         <input
           type="text"
           id="name"
           name="name"
           value="{{user[1]}}"
-          required
           class="mt-1 block w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         />
       </div>
 
       <!-- Surname -->
       <div>
-        <label for="surname" class="block text-sm font-medium text-gray-700"
-          >Soyad</label
-        >
+        <label for="surname" class="block text-sm font-medium text-gray-700">Soyad</label>
         <input
           type="text"
           id="surname"
           name="surname"
           value="{{user[2]}}"
-          required
           class="mt-1 block w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
         />
       </div>
 
-      <!-- Username -->
-      <div>
-        <label for="username" class="block text-sm font-medium text-gray-700"
-          >Kullanıcı Adı</label
-        >
-        <input
-          type="text"
-          id="username"
-          name="username"
-          value="{{player.user_name}}"
-          required
-          class="mt-1 block w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-        />
-      </div>
-
-      <div>
-        <label for="password" class="block text-sm font-medium text-gray-700"
-          >Şifre</label
-        >
-        <input
-          type="password"
-          id="password"
-          name="password"
-          required
-          class="mt-1 block w-full px-4 py-2 text-gray-900 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-        />
-      </div>
 
       <!-- Buttons: Save and Delete -->
       <div class="flex justify-between mt-6">

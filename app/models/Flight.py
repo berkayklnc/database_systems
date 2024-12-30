@@ -1,6 +1,7 @@
 from flask import current_app
 import time
 import random
+from app.models.Player import PlayerModel
 class Flight:
     def __init__(
         self,
@@ -167,4 +168,41 @@ class FlightModel:
         gain=gain_eco+gain_busi
         cursor=self.mysql.connection.cursor()
         cursor.execute("UPDATE players SET balance=balance+%s WHERE id=%s",(gain,player_id))
-
+        cursor.close()
+    def get_ticket(self,buyer_id, flightid_1,ticket_1,ticket_2,flightid_2=None):
+        cursor=self.mysql.connection.cursor()
+        cursor.execute("""
+        SELECT p.player_id 
+        FROM flights f
+        JOIN players_plane p ON f.player_plane_id = p.id
+        JOIN players player ON player.id = p.player_id
+        WHERE f.id = %s;
+        """, (flightid_1,))
+        seller_id = cursor.fetchone()[0]
+        cursor.execute("""
+        UPDATE flights
+        SET passengers = passengers + 1
+        WHERE id = %s;
+        """, (flightid_1,))
+        self.mysql.connection.commit()
+        PlayerModel().update_balance(buyer_id,False,ticket_1)
+        PlayerModel().update_balance(seller_id,True,ticket_1)
+        if flightid_2:
+            cursor.execute("""
+            SELECT p.player_id 
+            FROM flights f
+            JOIN players_plane p ON f.player_plane_id = p.id
+            JOIN players player ON player.id = p.player_id
+            WHERE f.id = %s;
+            """, (flightid_2,))
+            seller_id = cursor.fetchone()[0]
+            cursor.execute("""
+            UPDATE flights
+            SET passengers = passengers + 1
+            WHERE id = %s;
+            """, (flightid_2,))
+            self.mysql.connection.commit()
+            PlayerModel().update_balance(buyer_id,False,ticket_2)
+            PlayerModel().update_balance(seller_id,True,ticket_2)
+        cursor.close()
+    

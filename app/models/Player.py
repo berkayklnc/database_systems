@@ -73,4 +73,4 @@ class PlayerModel:
         print(base)
         print(chance)
         return base,chance
-        
+    

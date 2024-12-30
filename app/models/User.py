@@ -1,5 +1,5 @@
 from flask import current_app
-
+from app.models.Player import PlayerModel
 class User:
     def __init__(self, name, surname,gender):
         self.name = name
@@ -30,3 +30,10 @@ class UserModel:
         user_id = cursor.lastrowid
         cursor.close()
         return user_id
+    def update_user(self, name,surname,username):
+        cursor = self.mysql.connection.cursor()
+        user_id = PlayerModel().get_player_by_user_name(username).user_id
+        cursor.execute("UPDATE users SET name=%s, surname=%s WHERE id=%s",(name,surname,user_id, ))
+        self.mysql.connection.commit()
+        user_id = cursor.lastrowid
+        cursor.close()
