@@ -37,3 +37,10 @@ class UserModel:
         self.mysql.connection.commit()
         user_id = cursor.lastrowid
         cursor.close()
+    
+    def delete_user(self,username):
+        cursor = self.mysql.connection.cursor()
+        user_id = PlayerModel().get_player_by_user_name(username).user_id  
+        cursor.execute("DELETE FROM users WHERE id=%s",(user_id,))
+        self.mysql.connection.commit()
+        cursor.close()      

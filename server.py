@@ -30,6 +30,7 @@ def create_app():
     app.add_url_rule('/myplanes/addflight','add_flight',views.create_new_flight,methods=['POST'])
     app.add_url_rule('/buy_ticket','buy_ticket',views.buy_ticket,methods=['POST'])
     app.add_url_rule('/update_profile','update_profile',views.update_profile, methods=['GET', 'POST'])
+    app.add_url_rule('/delete_profile','delete_profile',views.delete_profile, methods=['POST'])
     app.add_url_rule('/delete_plane/<int:plane_id>',view_func=views.delete_plane,methods=['POST'])
     mysql = MySQL(app)
     app.config["mysql"] = mysql

@@ -201,6 +201,7 @@ def update_profile():
     name = request.form['name']
     surname = request.form['surname']
     username = session.get('user_name')
+    print("burdayım")
     UserModel().update_user(name,surname,username)
     return profile_page()
 
@@ -208,3 +209,9 @@ def delete_plane(plane_id):
     player_id = session.get('player_id')
     PlayerPlaneModel().delete_player_plane(player_id,plane_id)
     return redirect(url_for('myplanes'))
+
+def delete_profile():
+    username = session.get('user_name')
+    print("aaaa")
+    UserModel().delete_user(username)
+    return redirect(url_for('login'))
