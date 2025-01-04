@@ -67,7 +67,7 @@ class FlightModel:
             AND f.flight_time >= %s
             AND f.flight_time <= %s+INTERVAL 2 DAY
             ORDER BY f.economy_ticket_price
-            LIMIT 20
+            LIMIT 40
         """, (destination, origin, flight_time,flight_time))
         flights=cursor.fetchall()
         cursor.close()
@@ -117,7 +117,7 @@ class FlightModel:
         AND f1.flight_time >= %s
         AND f2.flight_time > (f1.flight_time + INTERVAL f1.travel_time MINUTE)
         ORDER BY (f1.economy_ticket_price + f2.economy_ticket_price)
-        LIMIT 10
+        LIMIT 40
     """, (origin, destination, flight_time))
 
         flights=cursor.fetchall()
