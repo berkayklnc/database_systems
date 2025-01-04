@@ -192,6 +192,7 @@ def buy_ticket():
     ticket_2 = float(data.get('ticket_2') or 0)
     print(f'Button clicked for flights with ID:{flight_id1}and {flight_id2} and total')
     FlightModel().get_ticket(player_id,flight_id1,ticket_1,ticket_2,flight_id2)
+    update_balance_text()
     return jsonify({'status': 'success', 'message': 'Transfer flight info processed'}), 200
 
 

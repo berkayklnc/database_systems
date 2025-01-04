@@ -12,6 +12,6 @@ CREATE TABLE IF NOT EXISTS flights (
     business_ticket_price FLOAT(6,2),
 
     FOREIGN KEY (player_plane_id) REFERENCES players_plane(id)
-    ON DELETE SET NULL
+    ON DELETE CASCADE
     ON UPDATE CASCADE
 );
