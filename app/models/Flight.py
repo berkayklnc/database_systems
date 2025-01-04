@@ -65,9 +65,10 @@ class FlightModel:
             WHERE f.dest_city = %s 
             AND f.origin_city = %s 
             AND f.flight_time >= %s
+            AND f.flight_time <= %s+INTERVAL 2 DAY
             ORDER BY f.economy_ticket_price
             LIMIT 20
-        """, (destination, origin, flight_time))
+        """, (destination, origin, flight_time,flight_time))
         flights=cursor.fetchall()
         cursor.close()
         return flights
